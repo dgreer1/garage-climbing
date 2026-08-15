@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello World</title>
+    <style>
+      :root {
+        --bg: #f4f7fb;
+        --panel: #ffffff;
+        --text: #1f2937;
+        --accent: #2563eb;
+        --accent-dark: #1d4ed8;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(135deg, #eff6ff, var(--bg));
+        color: var(--text);
+      }
+
+      .card {
+        background: var(--panel);
+        border-radius: 16px;
+        box-shadow: 0 20px 45px rgba(37, 99, 235, 0.12);
+        padding: 3rem 4rem;
+        text-align: center;
+      }
+
+      h1 {
+        margin: 0 0 1rem;
+        font-size: clamp(2.5rem, 6vw, 4rem);
+      }
+
+      p {
+        margin: 0;
+        font-size: 1.1rem;
+        color: #4b5563;
+      }
+
+      .badge {
+        display: inline-block;
+        margin-top: 1.5rem;
+        padding: 0.75rem 1.25rem;
+        border-radius: 999px;
+        background: var(--accent);
+        color: white;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        text-decoration: none;
+      }
+
+      .badge:hover {
+        background: var(--accent-dark);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <h1>Hello, world!</h1>
+      <p>This is a simple GitHub Pages site.</p>
+      <a class="badge" href="https://pages.github.com/" target="_blank" rel="noreferrer">GitHub Pages</a>
+    </main>
+  </body>
+</html>
