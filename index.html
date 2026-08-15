@@ -1,74 +1,143 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello World</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Garage Climbing — Routes</title>
     <style>
-      :root {
-        --bg: #f4f7fb;
-        --panel: #ffffff;
-        --text: #1f2937;
-        --accent: #2563eb;
-        --accent-dark: #1d4ed8;
+      :root{
+        --bg:#f6f8fb;--card:#fff;--muted:#6b7280;--accent:#2563eb
       }
-
-      * {
-        box-sizing: border-box;
+      *{box-sizing:border-box}
+      body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(180deg,#eef2ff,var(--bg));color:#111}
+      header{padding:2rem 1rem;text-align:center}
+      h1{margin:0;font-size:1.75rem}
+      .controls{display:flex;gap:0.75rem;justify-content:center;align-items:center;margin-top:0.75rem}
+      select,input{padding:0.5rem 0.75rem;border-radius:8px;border:1px solid #e5e7eb}
+      main{max-width:1100px;margin:1rem auto;padding:1rem}
+      .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+      .card{background:var(--card);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(16,24,40,0.06);display:flex;flex-direction:column}
+      .card img{width:100%;height:180px;object-fit:cover;display:block}
+      .meta{padding:0.75rem 1rem}
+      .name{font-weight:700;margin:0 0 0.25rem}
+      .grade{color:var(--muted);font-size:0.9rem}
+      .empty{padding:3rem;text-align:center;color:var(--muted)}
+      /* Modal viewer (responsive) */
+      .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.65);z-index:9999;padding:2rem}
+      .modal.hidden{display:none}
+      .modal-content{max-width:calc(100vw - 4rem);max-height:calc(100vh - 4rem);display:flex;align-items:center;justify-content:center;padding:0.5rem}
+      .modal-content img{max-width:calc(100vw - 6rem);max-height:calc(100vh - 6rem);width:auto;height:auto;border-radius:8px;box-shadow:0 20px 40px rgba(2,6,23,0.6);object-fit:contain}
+      .modal-close{position:fixed;top:1rem;left:1rem;background:#fff;border-radius:999px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:0 8px 20px rgba(2,6,23,0.2);cursor:pointer}
+      @media (max-width:600px){
+        .modal{padding:1rem}
+        .modal-content img{max-width:calc(100vw - 3rem);max-height:calc(100vh - 3rem)}
+        .modal-close{top:0.5rem;left:0.5rem;width:36px;height:36px;font-size:16px}
       }
-
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        font-family: Arial, Helvetica, sans-serif;
-        background: linear-gradient(135deg, #eff6ff, var(--bg));
-        color: var(--text);
-      }
-
-      .card {
-        background: var(--panel);
-        border-radius: 16px;
-        box-shadow: 0 20px 45px rgba(37, 99, 235, 0.12);
-        padding: 3rem 4rem;
-        text-align: center;
-      }
-
-      h1 {
-        margin: 0 0 1rem;
-        font-size: clamp(2.5rem, 6vw, 4rem);
-      }
-
-      p {
-        margin: 0;
-        font-size: 1.1rem;
-        color: #4b5563;
-      }
-
-      .badge {
-        display: inline-block;
-        margin-top: 1.5rem;
-        padding: 0.75rem 1.25rem;
-        border-radius: 999px;
-        background: var(--accent);
-        color: white;
-        font-weight: 700;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        text-decoration: none;
-      }
-
-      .badge:hover {
-        background: var(--accent-dark);
-      }
+      footer{padding:1rem;text-align:center;color:var(--muted);font-size:0.9rem}
     </style>
   </head>
   <body>
-    <main class="card">
-      <h1>Hello, world!</h1>
-      <p>This is a simple GitHub Pages site.</p>
-      <a class="badge" href="https://pages.github.com/" target="_blank" rel="noreferrer">GitHub Pages</a>
+    <header>
+      <h1>Garage Climbing — Routes</h1>
+      <div class="controls">
+        <label for="gradeSelect">Grade:</label>
+        <select id="gradeSelect"><option value="all">All</option></select>
+        <label for="search">Name:</label>
+        <input id="search" placeholder="Filter by name" />
+      </div>
+    </header>
+    <main>
+      <div id="grid" class="grid" aria-live="polite"></div>
+      <div id="empty" class="empty" style="display:none">No climbs found.</div>
     </main>
+    <!-- Modal viewer -->
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="modal-close" id="modalClose" aria-label="Close">✕</div>
+      <div class="modal-content">
+        <img id="modalImg" alt="" src="" />
+      </div>
+    </div>
+    <footer>Images loaded from the `www` folder. Add images under grade folders and run <code>python generate_manifest.py</code> to update.</footer>
+
+    <script>
+      async function loadClimbs(){
+        const res = await fetch('www/climbs.json');
+        if(!res.ok) return [];
+        const data = await res.json();
+        return data.climbs || [];
+      }
+
+      function uniqueGrades(climbs){
+        const s = new Set(climbs.map(c=>c.grade));
+        return Array.from(s).sort();
+      }
+
+      function openModal(path, name){
+        const modal = document.getElementById('modal');
+        const img = document.getElementById('modalImg');
+        img.src = path;
+        img.alt = name || '';
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal(){
+        const modal = document.getElementById('modal');
+        const img = document.getElementById('modalImg');
+        modal.classList.add('hidden');
+        img.src = '';
+        document.body.style.overflow = '';
+      }
+
+      // close when clicking background or close button
+      document.addEventListener('click', (e)=>{
+        const modal = document.getElementById('modal');
+        if(!modal) return;
+        if(e.target.id === 'modal' || e.target.id === 'modalClose') closeModal();
+      });
+
+      // close on ESC
+      document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeModal(); });
+
+      function render(climbs, filterGrade, search){
+        const grid = document.getElementById('grid');
+        const empty = document.getElementById('empty');
+        grid.innerHTML='';
+        const filtered = climbs.filter(c=>{
+          if(filterGrade && filterGrade!=='all' && c.grade!==filterGrade) return false;
+          if(search){
+            return c.name.toLowerCase().includes(search.toLowerCase());
+          }
+          return true;
+        });
+        if(filtered.length===0){ empty.style.display='block'; return }
+        empty.style.display='none';
+        for(const c of filtered){
+          const el = document.createElement('article'); el.className='card';
+          const img = document.createElement('img'); img.src = c.path; img.alt = c.name; img.style.cursor = 'pointer';
+          img.addEventListener('click', ()=> openModal(c.path, c.name));
+          const meta = document.createElement('div'); meta.className='meta';
+          const name = document.createElement('div'); name.className='name'; name.textContent = c.name;
+          const grade = document.createElement('div'); grade.className='grade'; grade.textContent = c.grade;
+          meta.appendChild(name); meta.appendChild(grade);
+          el.appendChild(img); el.appendChild(meta);
+          grid.appendChild(el);
+        }
+      }
+
+      (async function(){
+        const climbs = await loadClimbs();
+        const grades = uniqueGrades(climbs);
+        const gradeSelect = document.getElementById('gradeSelect');
+        for(const g of grades){
+          const opt = document.createElement('option'); opt.value=g; opt.textContent=g; gradeSelect.appendChild(opt);
+        }
+        const searchInput = document.getElementById('search');
+        function update(){ render(climbs, gradeSelect.value, searchInput.value.trim()) }
+        gradeSelect.addEventListener('change', update);
+        searchInput.addEventListener('input', update);
+        update();
+      })();
+    </script>
   </body>
 </html>

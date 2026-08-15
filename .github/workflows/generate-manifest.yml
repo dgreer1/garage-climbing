@@ -1,0 +1,39 @@
+name: Generate climbs manifest
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  generate:
+    name: Generate manifest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install pip
+        run: python -m pip install --upgrade pip
+
+      - name: Run manifest generator
+        run: python generate_manifest.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add www/climbs.json
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update climbs manifest"
+            git push
+          else
+            echo "No changes to commit"
+          fi
