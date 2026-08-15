@@ -3,38 +3,38 @@
     {
       "name": "Knackered Book",
       "grade": "v0",
-      "file": "Knackered_Book.png",
-      "path": "www/v0/Knackered_Book.png"
+      "file": "Knackered_Book.jpg",
+      "path": "www/v0/Knackered_Book.jpg"
     },
     {
       "name": "The Dawn Wall",
       "grade": "v0",
-      "file": "The_Dawn_Wall.png",
-      "path": "www/v0/The_Dawn_Wall.png"
+      "file": "The_Dawn_Wall.jpg",
+      "path": "www/v0/The_Dawn_Wall.jpg"
     },
     {
       "name": "Fist of Dougal",
       "grade": "v1",
-      "file": "Fist_of_Dougal.png",
-      "path": "www/v1/Fist_of_Dougal.png"
+      "file": "Fist_of_Dougal.jpg",
+      "path": "www/v1/Fist_of_Dougal.jpg"
     },
     {
       "name": "Viral Mental Medicine",
       "grade": "v1",
-      "file": "Viral_Mental_Medicine.png",
-      "path": "www/v1/Viral_Mental_Medicine.png"
+      "file": "Viral_Mental_Medicine.jpg",
+      "path": "www/v1/Viral_Mental_Medicine.jpg"
     },
     {
       "name": "Offsite",
       "grade": "v2",
-      "file": "Offsite.png",
-      "path": "www/v2/Offsite.png"
+      "file": "Offsite.jpg",
+      "path": "www/v2/Offsite.jpg"
     },
     {
       "name": "Pink Herring",
       "grade": "v2",
-      "file": "Pink_Herring.png",
-      "path": "www/v2/Pink_Herring.png"
+      "file": "Pink_Herring.jpg",
+      "path": "www/v2/Pink_Herring.jpg"
     }
   ]
 }
