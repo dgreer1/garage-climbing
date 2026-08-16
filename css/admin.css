@@ -1,0 +1,18 @@
+body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;background:#f7fafc;color:#111}
+.header{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;background:#fff;border-bottom:1px solid #e6eef8}
+.h-title{font-weight:700}
+.toolbar{display:flex;gap:0.5rem}
+.container{display:flex;gap:1rem;padding:1rem}
+.left{flex:1;min-width:320px}
+.side{width:320px;background:#fff;border-radius:8px;padding:0.75rem;box-shadow:0 6px 18px rgba(2,6,23,0.04)}
+.image-wrap{background:#fff;border-radius:8px;padding:0.5rem;display:flex;align-items:center;justify-content:center}
+.wall-img{max-width:100%;height:auto;display:block}
+.controls{margin-bottom:0.5rem}
+.cp-list{max-height:60vh;overflow:auto}
+.cp-item{padding:0.4rem;border-bottom:1px dashed #eee;display:flex;align-items:center;justify-content:space-between}
+.btn{padding:0.45rem 0.7rem;border-radius:6px;border:1px solid #cfe0ff;background:#eaf4ff;cursor:pointer}
+.small{padding:0.3rem 0.5rem;font-size:0.9rem}
+.footer{padding:0.5rem;text-align:center;color:#6b7280}
+.svg-overlay{position:absolute;top:0;left:0;z-index:20;pointer-events:none}
+.img-container svg{pointer-events:auto}
+.img-container{position:relative}

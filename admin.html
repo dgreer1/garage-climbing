@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Garage Climbing — Admin</title>
+    <link rel="stylesheet" href="css/admin.css" />
+  </head>
+  <body>
+    <div id="fileWarning" style="display:none;background:#fff3cd;border:1px solid #ffeeba;padding:0.75rem;color:#856404;">
+      <strong>Warning:</strong> You opened this page directly from the file system. Module scripts and fetch calls require the page to be served over HTTP.
+      Run this in a terminal from the project root and then open <code>http://localhost:8000/admin.html</code>:
+      <pre style="background:#fff;padding:0.5rem;border-radius:4px;margin:0.5rem 0">python -m http.server 8000</pre>
+    </div>
+    <div class="header">
+      <div class="h-title">Garage Climbing — Admin</div>
+      <div class="toolbar">
+        <button id="useRepoImg" class="btn">Use repo reference image</button>
+        <label class="btn small">Load image<input id="imgFile" type="file" accept="image/*" style="display:none" /></label>
+        <button id="downloadCPs" class="btn small">Download control-points.json</button>
+        <label class="btn small">Import CPs<input id="importCPs" type="file" accept="application/json" style="display:none" /></label>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="left">
+        <div class="controls">Mode: <strong>Register control points</strong> — <span id="modeInstructions">click on the image to add CPs</span></div>
+        <div class="image-wrap img-container" id="adminApp">
+          <img id="wallImage" class="wall-img" src="georef_image.jpg" alt="wall reference" />
+          <svg class="svg-overlay" id="svgOverlay" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+      </div>
+      <div class="side">
+        <h3>Control Points</h3>
+        <div id="cpList" class="cp-list"></div>
+        <div style="margin-top:0.5rem">
+          <button id="clearLocal" class="btn small">Clear local edits</button>
+          <button id="exportAll" class="btn small">Export all data (zip)</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer">Tip: add control points quickly by clicking the image; use the Download button to save JSON then commit to the `data/` folder.</div>
+
+    <script type="module" src="js/registration.js"></script>
+  </body>
+</html>
