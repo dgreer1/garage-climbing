@@ -1,3 +1,144 @@
 {
-  "holds": []
+  "holds": [
+    {
+      "id": "H001",
+      "x": 0.381926,
+      "y": 0.493515,
+      "colour": "Wood",
+      "gridRef": "I13",
+      "notes": "Avocado",
+      "active": true,
+      "name": "Avocado"
+    },
+    {
+      "id": "H002",
+      "x": 0.420185,
+      "y": 0.677095,
+      "colour": "Blue",
+      "gridRef": "Q14",
+      "notes": "Blue Handle",
+      "active": true,
+      "name": "Blue Handle"
+    },
+    {
+      "id": "H003",
+      "x": 0.381266,
+      "y": 0.75325,
+      "colour": "blue",
+      "gridRef": "U12",
+      "notes": "First dawn wall hold",
+      "active": true,
+      "name": "Blue 1"
+    },
+    {
+      "id": "H004",
+      "x": 0.439314,
+      "y": 0.584493,
+      "colour": "blue",
+      "gridRef": "M14",
+      "notes": "",
+      "active": true,
+      "name": "Blue 2"
+    },
+    {
+      "id": "H005",
+      "x": 0.503958,
+      "y": 0.492132,
+      "colour": "blue",
+      "gridRef": "I15",
+      "notes": "Third hold of the Dawn Wall",
+      "active": true,
+      "name": "Blue 3"
+    },
+    {
+      "id": "H006",
+      "x": 0.315303,
+      "y": 0.39179,
+      "colour": "blue",
+      "gridRef": "E12",
+      "notes": "Fourth hold of the Dawn Wall",
+      "active": true,
+      "name": "Blue 4"
+    },
+    {
+      "id": "H007",
+      "x": 0.378628,
+      "y": 0.284379,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "Top of the Dawn Wall",
+      "active": true,
+      "name": "Blue Top"
+    },
+    {
+      "id": "H008",
+      "x": 0.379947,
+      "y": 0.394527,
+      "colour": "blue",
+      "gridRef": "E13",
+      "notes": "",
+      "active": true,
+      "name": "Booby"
+    },
+    {
+      "id": "H009",
+      "x": 0.127968,
+      "y": 0.885747,
+      "colour": "yellow",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Yellow foot 1"
+    },
+    {
+      "id": "H010",
+      "x": 0.176781,
+      "y": 0.561231,
+      "colour": "yellow",
+      "gridRef": "L3",
+      "notes": "",
+      "active": true,
+      "name": "Yellow 2"
+    },
+    {
+      "id": "H011",
+      "x": 0.244063,
+      "y": 0.720411,
+      "colour": "yellow",
+      "gridRef": "T4",
+      "notes": "",
+      "active": true,
+      "name": "Yellow 1"
+    },
+    {
+      "id": "H012",
+      "x": 0.414248,
+      "y": 0.513341,
+      "colour": "yellow",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Yellow 3"
+    },
+    {
+      "id": "H013",
+      "x": 0.412929,
+      "y": 0.415279,
+      "colour": "yellow",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Yellow 4"
+    },
+    {
+      "id": "H014",
+      "x": 0.664908,
+      "y": 0.365108,
+      "colour": "yellow",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Yellow 5"
+    }
+  ]
 }
