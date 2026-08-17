@@ -26,6 +26,7 @@
           <div style="margin-top:0.5rem">
             <button id="modeRegister" class="btn small">Register CPs</button>
             <button id="modeHolds" class="btn small">Holds</button>
+            <button id="modeClimbs" class="btn small">Climbs</button>
           </div>
         <div class="image-wrap img-container" id="adminApp">
           <img id="wallImage" class="wall-img" src="georef_image.jpg" alt="wall reference" />
@@ -33,21 +34,48 @@
         </div>
       </div>
       <div class="side">
-        <h3>Control Points</h3>
-        <div id="cpList" class="cp-list"></div>
-        <div style="margin-top:0.5rem">
-          <button id="downloadCPs" class="btn small">Download control-points.json</button>
-          <label class="btn small">Import CPs<input id="importCPs" type="file" accept="application/json" style="display:none" /></label>
-          <button id="clearCPs" class="btn small">Clear CP local edits</button>
+        <div id="cpSection" class="section">
+          <h3>Control Points</h3>
+          <div id="cpList" class="cp-list"></div>
+          <div class="actions" style="margin-top:0.5rem">
+            <button id="downloadCPs" class="btn small">Download control-points.json</button>
+            <label class="btn small">Import CPs<input id="importCPs" type="file" accept="application/json" style="display:none" /></label>
+            <button id="clearCPs" class="btn small">Clear CP local edits</button>
+          </div>
         </div>
-        <h3 style="margin-top:0.75rem">Holds</h3>
-        <div id="holdList" class="cp-list"></div>
-        <div id="holdProps" style="margin-top:0.5rem"></div>
-        <div style="margin-top:0.5rem">
-          <button id="clearHolds" class="btn small">Clear Hold local edits</button>
-          <button id="exportAll" class="btn small">Export all data (JSON)</button>
-          <button id="downloadHolds" class="btn small">Download holds.json</button>
-          <label class="btn small">Import Holds<input id="importHolds" type="file" accept="application/json" style="display:none" /></label>
+
+        <div id="holdsSection" class="section hidden">
+          <h3 style="margin-top:0.75rem">Holds</h3>
+          <div id="holdList" class="cp-list"></div>
+          <div id="holdProps" style="margin-top:0.5rem"></div>
+          <div class="actions" style="margin-top:0.5rem">
+            <button id="clearHolds" class="btn small">Clear Hold local edits</button>
+            <button id="exportAll" class="btn small">Export all data (JSON)</button>
+            <button id="downloadHolds" class="btn small">Download holds.json</button>
+            <label class="btn small">Import Holds<input id="importHolds" type="file" accept="application/json" style="display:none" /></label>
+          </div>
+        </div>
+
+        <div id="climbsSection" class="section hidden">
+          <h3 style="margin-top:0.75rem">Climb Editor</h3>
+          <div id="climbList" class="cp-list"></div>
+          <div id="climbProps" style="margin-top:0.5rem"></div>
+          <div style="margin-top:0.5rem">
+            <div class="actions">
+              <input id="climbName" placeholder="Climb name" style="width:200px" />
+              <input id="climbGrade" placeholder="Grade" style="width:80px;margin-left:0.5rem" />
+            </div>
+            <div class="actions" style="margin-top:0.5rem">
+              <button id="startRecord" class="btn small">Start recording</button>
+              <button id="stopRecord" class="btn small" style="display:none">Stop recording</button>
+              <button id="saveClimb" class="btn small">Save climb</button>
+            </div>
+            <div class="actions" style="margin-top:0.5rem">
+              <button id="newClimb" class="btn small">New climb</button>
+              <button id="downloadClimbs" class="btn small">Download climbs.json</button>
+              <label class="btn small">Import Climbs<input id="importClimbs" type="file" accept="application/json" style="display:none" /></label>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -55,5 +83,6 @@
 
     <script type="module" src="js/registration.js"></script>
     <script type="module" src="js/holds.js"></script>
+    <script type="module" src="js/climbs.js"></script>
   </body>
 </html>

@@ -152,7 +152,7 @@ class HoldsApp{
       const cx = ho.x * w; const cy = ho.y * h;
       const g = document.createElementNS('http://www.w3.org/2000/svg','g'); g.classList.add('hold-marker');
       const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
-      circle.setAttribute('cx', cx); circle.setAttribute('cy', cy); circle.setAttribute('r', 6); circle.setAttribute('fill', ho.colour||'blue'); circle.setAttribute('stroke','#fff'); circle.setAttribute('stroke-width',1);
+      circle.setAttribute('cx', cx); circle.setAttribute('cy', cy); circle.setAttribute('r', 3); circle.setAttribute('fill', ho.colour||'blue'); circle.setAttribute('stroke','#fff'); circle.setAttribute('stroke-width',1);
       const text = document.createElementNS('http://www.w3.org/2000/svg','text'); text.setAttribute('x', cx+8); text.setAttribute('y', cy+4); text.setAttribute('fill','#111'); text.setAttribute('font-size',10); text.textContent = (ho.name && ho.name.length>0) ? ho.name : ho.id;
       g.appendChild(circle); g.appendChild(text);
       this.svg.appendChild(g);

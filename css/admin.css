@@ -19,3 +19,11 @@ body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;background:#f7fafc;co
 .hold-marker circle{opacity:0.95}
 .hold-marker text{font-weight:700}
 .btn.active{background:#0056b3;color:#fff}
+/* hide sections when not active */
+.hidden{display:none}
+.section{display:block}
+.section .actions{display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center}
+.section .actions .btn, .section .actions label{margin:0}
+.section input{box-sizing:border-box}
+/* ensure .section.hidden wins when both classes present */
+.section.hidden{display:none}

@@ -141,9 +141,9 @@ class RegistrationApp{
       const g = document.createElementNS('http://www.w3.org/2000/svg','g');
       const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
       // smaller marker radius so dots are not too large
-      circle.setAttribute('cx', cx); circle.setAttribute('cy', cy); circle.setAttribute('r', 5); circle.setAttribute('fill','#ff5722'); circle.setAttribute('stroke','#fff'); circle.setAttribute('stroke-width',1.5);
+      circle.setAttribute('cx', cx); circle.setAttribute('cy', cy); circle.setAttribute('r', 2.5); circle.setAttribute('fill','#ff5722'); circle.setAttribute('stroke','#fff'); circle.setAttribute('stroke-width',1.5);
       // highlight the CP being edited
-      if(this.editingId === cp.id){ circle.setAttribute('fill','#ffd54f'); circle.setAttribute('r',7); circle.setAttribute('stroke','#222'); }
+      if(this.editingId === cp.id){ circle.setAttribute('fill','#ffd54f'); circle.setAttribute('r',3.5); circle.setAttribute('stroke','#222'); }
       circle.style.cursor = 'pointer';
       circle.setAttribute('pointer-events','all');
       const text = document.createElementNS('http://www.w3.org/2000/svg','text'); text.setAttribute('x', cx+8); text.setAttribute('y', cy+4); text.setAttribute('fill','#111'); text.setAttribute('font-size',12); text.textContent = cp.id;
@@ -161,21 +161,39 @@ window.addEventListener('DOMContentLoaded', ()=>{
   window.updateModeUI = (mode)=>{
     const btnReg = document.getElementById('modeRegister');
     const btnH = document.getElementById('modeHolds');
+    const btnC = document.getElementById('modeClimbs');
     if(btnReg) btnReg.classList.toggle('active', mode==='register');
     if(btnH) btnH.classList.toggle('active', mode==='holds');
+    if(btnC) btnC.classList.toggle('active', mode==='climbs');
     // set registration app mode
     if(window.regApp) window.regApp.mode = (mode==='register') ? 'register' : 'other';
     // set holds app mode if present
     if(window.holdsApp) window.holdsApp.mode = mode==='holds' ? 'holds' : 'register';
     if(window.holdsApp) window.holdsApp.render();
+    // show/hide right-side sections
+    const cpSec = document.getElementById('cpSection');
+    const holdsSec = document.getElementById('holdsSection');
+    const climbsSec = document.getElementById('climbsSection');
+    if(cpSec) cpSec.classList.toggle('hidden', mode!=='register');
+    if(holdsSec) holdsSec.classList.toggle('hidden', mode!=='holds');
+    if(climbsSec) climbsSec.classList.toggle('hidden', mode!=='climbs');
+    // render climbs UI if present
+    if(window.climbApp) window.climbApp.render();
     // update instructions
     const ctl = document.querySelector('.controls');
-    if(ctl) ctl.innerHTML = `Mode: <strong>${mode==='register' ? 'Register control points' : 'Holds'}</strong> — <span id="modeInstructions">${mode==='register' ? 'click on the image to add CPs' : 'click on the image to add/drag holds'}</span>`;
+    if(ctl){
+      let txt = '';
+      if(mode==='register') txt = 'click on the image to add CPs';
+      else if(mode==='holds') txt = 'click on the image to add/drag holds';
+      else if(mode==='climbs') txt = 'Climb mode: record a sequence of holds';
+      ctl.innerHTML = `Mode: <strong>${mode==='register' ? 'Register control points' : mode==='holds' ? 'Holds' : 'Climbs'}</strong> — <span id="modeInstructions">${txt}</span>`;
+    }
   };
 
   // wire mode buttons to the shared updater
   const bReg = document.getElementById('modeRegister'); if(bReg) bReg.addEventListener('click', ()=> window.updateModeUI('register'));
   const bH = document.getElementById('modeHolds'); if(bH) bH.addEventListener('click', ()=> window.updateModeUI('holds'));
+  const bC = document.getElementById('modeClimbs'); if(bC) bC.addEventListener('click', ()=> window.updateModeUI('climbs'));
 
   // set initial mode UI
   window.updateModeUI('register');
