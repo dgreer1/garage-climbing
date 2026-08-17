@@ -54,8 +54,11 @@
     <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
       <div class="modal-close" id="modalClose" aria-label="Close">✕</div>
       <div class="modal-content">
-        <img id="modalImg" alt="" src="" />
-      </div>
+          <div id="modalFrame" style="position:relative;display:inline-block">
+            <img id="modalImg" alt="" src="" />
+            <svg id="modalOverlay" style="position:absolute;left:0;top:0;pointer-events:none;z-index:5" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+        </div>
     </div>
     <footer>Images loaded from the `www` folder. Add images under grade folders and run <code>python generate_manifest.py</code> to update.</footer>
 
@@ -77,9 +80,42 @@
         const img = document.getElementById('modalImg');
         img.src = path;
         img.alt = name || '';
-        modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
+          modal.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+          // attempt to render route overlay if data available
+          setTimeout(()=> renderOverlayForClimb(name, img), 50);
       }
+
+        async function renderOverlayForClimb(climbName, imgEl){
+          const overlay = document.getElementById('modalOverlay');
+          if(!overlay) return;
+          // clear
+          while(overlay.firstChild) overlay.removeChild(overlay.firstChild);
+          // try load data files from repo 'data' folder
+          let holdsData = null; let climbsData = null;
+          try{ holdsData = await fetch('data/holds.json').then(r=> r.ok ? r.json() : null); }catch(e){}
+          try{ climbsData = await fetch('data/climbs.json').then(r=> r.ok ? r.json() : null); }catch(e){}
+          if(!holdsData || !climbsData) return;
+          const climb = (climbsData.climbs||[]).find(c=> c.name === climbName || c.id === climbName);
+          if(!climb) return;
+          const holdsMap = new Map(); (holdsData.holds||[]).forEach(h=> holdsMap.set(h.id, h));
+          // wait for image to layout
+          await new Promise(res=>{ if(imgEl.complete) res(); else imgEl.onload = ()=> res(); });
+          const rect = imgEl.getBoundingClientRect();
+          const w = imgEl.naturalWidth && imgEl.naturalHeight ? rect.width : rect.width;
+          const h = rect.height;
+          overlay.setAttribute('width', rect.width); overlay.setAttribute('height', rect.height);
+          overlay.style.width = rect.width + 'px'; overlay.style.height = rect.height + 'px'; overlay.style.left = imgEl.offsetLeft + 'px'; overlay.style.top = imgEl.offsetTop + 'px';
+          // draw polyline
+          const points = [];
+          for(const hid of (climb.holds||[])){
+            const ho = holdsMap.get(hid); if(!ho) continue; const cx = ho.x * rect.width; const cy = ho.y * rect.height; points.push(`${cx},${cy}`);
+            const circle = document.createElementNS('http://www.w3.org/2000/svg','circle'); circle.setAttribute('cx', cx); circle.setAttribute('cy', cy); circle.setAttribute('r', 4); circle.setAttribute('fill','#ff5722'); circle.setAttribute('stroke','#fff'); circle.setAttribute('stroke-width',1.2);
+            const text = document.createElementNS('http://www.w3.org/2000/svg','text'); text.setAttribute('x', cx+6); text.setAttribute('y', cy+4); text.setAttribute('fill','#111'); text.setAttribute('font-size',12); text.textContent = hid;
+            overlay.appendChild(circle); overlay.appendChild(text);
+          }
+          if(points.length>1){ const pl = document.createElementNS('http://www.w3.org/2000/svg','polyline'); pl.setAttribute('points', points.join(' ')); pl.setAttribute('fill','none'); pl.setAttribute('stroke','#ff5722'); pl.setAttribute('stroke-width',2); pl.setAttribute('stroke-linecap','round'); pl.setAttribute('stroke-linejoin','round'); overlay.appendChild(pl); }
+        }
 
       function closeModal(){
         const modal = document.getElementById('modal');
