@@ -17,14 +17,16 @@
       <div class="toolbar">
         <button id="useRepoImg" class="btn">Use repo reference image</button>
         <label class="btn small">Load image<input id="imgFile" type="file" accept="image/*" style="display:none" /></label>
-        <button id="downloadCPs" class="btn small">Download control-points.json</button>
-        <label class="btn small">Import CPs<input id="importCPs" type="file" accept="application/json" style="display:none" /></label>
       </div>
     </div>
 
     <div class="container">
       <div class="left">
         <div class="controls">Mode: <strong>Register control points</strong> — <span id="modeInstructions">click on the image to add CPs</span></div>
+          <div style="margin-top:0.5rem">
+            <button id="modeRegister" class="btn small">Register CPs</button>
+            <button id="modeHolds" class="btn small">Holds</button>
+          </div>
         <div class="image-wrap img-container" id="adminApp">
           <img id="wallImage" class="wall-img" src="georef_image.jpg" alt="wall reference" />
           <svg class="svg-overlay" id="svgOverlay" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -34,13 +36,24 @@
         <h3>Control Points</h3>
         <div id="cpList" class="cp-list"></div>
         <div style="margin-top:0.5rem">
-          <button id="clearLocal" class="btn small">Clear local edits</button>
-          <button id="exportAll" class="btn small">Export all data (zip)</button>
+          <button id="downloadCPs" class="btn small">Download control-points.json</button>
+          <label class="btn small">Import CPs<input id="importCPs" type="file" accept="application/json" style="display:none" /></label>
+          <button id="clearCPs" class="btn small">Clear CP local edits</button>
+        </div>
+        <h3 style="margin-top:0.75rem">Holds</h3>
+        <div id="holdList" class="cp-list"></div>
+        <div id="holdProps" style="margin-top:0.5rem"></div>
+        <div style="margin-top:0.5rem">
+          <button id="clearHolds" class="btn small">Clear Hold local edits</button>
+          <button id="exportAll" class="btn small">Export all data (JSON)</button>
+          <button id="downloadHolds" class="btn small">Download holds.json</button>
+          <label class="btn small">Import Holds<input id="importHolds" type="file" accept="application/json" style="display:none" /></label>
         </div>
       </div>
     </div>
     <div class="footer">Tip: add control points quickly by clicking the image; use the Download button to save JSON then commit to the `data/` folder.</div>
 
     <script type="module" src="js/registration.js"></script>
+    <script type="module" src="js/holds.js"></script>
   </body>
 </html>

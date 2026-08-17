@@ -35,9 +35,9 @@ class RegistrationApp{
     document.getElementById('imgFile').addEventListener('change', (e)=>{ const f = e.target.files[0]; if(!f) return; const url = URL.createObjectURL(f); this.imgEl.src = url; });
     document.getElementById('downloadCPs').addEventListener('click', ()=> downloadJSON('control-points.json',{controlPoints:this.cps}));
     document.getElementById('importCPs').addEventListener('change', (e)=>{ const f = e.target.files[0]; if(!f) return; readFileInput(f, (d)=>{ if(d.controlPoints) { this.cps = d.controlPoints; this.saveLocal(); this.renderList(); } else alert('No controlPoints array found'); }); });
-    // clear local edits
-    const clearBtn = document.getElementById('clearLocal');
-    if(clearBtn) clearBtn.addEventListener('click', ()=>{ if(confirm('Clear local control points? This cannot be undone.')){ localStorage.removeItem('controlPoints'); this.cps = []; this.renderList(); }});
+    // clear local control points (button moved into CP section)
+    const clearCPs = document.getElementById('clearCPs');
+    if(clearCPs) clearCPs.addEventListener('click', ()=>{ if(confirm('Clear local control points? This cannot be undone.')){ localStorage.removeItem('controlPoints'); this.cps = []; this.saveLocal(); this.renderList(); }});
     // update instructions if present
     if(this.instructionsEl) this.instructionsEl.textContent = 'click on the image to add CPs';
   }
@@ -157,6 +157,41 @@ class RegistrationApp{
 window.addEventListener('DOMContentLoaded', ()=>{
   const appRoot = document.getElementById('adminApp');
   window.regApp = new RegistrationApp(appRoot);
+  // global mode UI updater used by both apps
+  window.updateModeUI = (mode)=>{
+    const btnReg = document.getElementById('modeRegister');
+    const btnH = document.getElementById('modeHolds');
+    if(btnReg) btnReg.classList.toggle('active', mode==='register');
+    if(btnH) btnH.classList.toggle('active', mode==='holds');
+    // set registration app mode
+    if(window.regApp) window.regApp.mode = (mode==='register') ? 'register' : 'other';
+    // set holds app mode if present
+    if(window.holdsApp) window.holdsApp.mode = mode==='holds' ? 'holds' : 'register';
+    if(window.holdsApp) window.holdsApp.render();
+    // update instructions
+    const ctl = document.querySelector('.controls');
+    if(ctl) ctl.innerHTML = `Mode: <strong>${mode==='register' ? 'Register control points' : 'Holds'}</strong> — <span id="modeInstructions">${mode==='register' ? 'click on the image to add CPs' : 'click on the image to add/drag holds'}</span>`;
+  };
+
+  // wire mode buttons to the shared updater
+  const bReg = document.getElementById('modeRegister'); if(bReg) bReg.addEventListener('click', ()=> window.updateModeUI('register'));
+  const bH = document.getElementById('modeHolds'); if(bH) bH.addEventListener('click', ()=> window.updateModeUI('holds'));
+
+  // set initial mode UI
+  window.updateModeUI('register');
+
+  // Export all data (aggregate JSON download)
+  const exportBtn = document.getElementById('exportAll');
+  if(exportBtn) exportBtn.addEventListener('click', async ()=>{
+    const cpLocal = loadFromLocal('controlPoints');
+    const holdsLocal = loadFromLocal('holds');
+    const controlPoints = (cpLocal && cpLocal.controlPoints) ? cpLocal.controlPoints : (await loadJSON('data/control-points.json'))?.controlPoints || [];
+    const holds = (holdsLocal && holdsLocal.holds) ? holdsLocal.holds : (await loadJSON('data/holds.json'))?.holds || [];
+    const layouts = (await loadJSON('data/layouts.json')) || {};
+    const climbs = (await loadJSON('data/climbs.json')) || {};
+    const bundle = { controlPoints, holds, layouts, climbs, exportedAt: new Date().toISOString() };
+    downloadJSON('project-data.json', bundle);
+  });
 });
 
 export default RegistrationApp;

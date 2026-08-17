@@ -16,3 +16,6 @@ body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;background:#f7fafc;co
 .svg-overlay{position:absolute;top:0;left:0;z-index:20;pointer-events:none}
 .img-container svg{pointer-events:auto}
 .img-container{position:relative}
+.hold-marker circle{opacity:0.95}
+.hold-marker text{font-weight:700}
+.btn.active{background:#0056b3;color:#fff}
