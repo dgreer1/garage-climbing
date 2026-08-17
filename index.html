@@ -109,7 +109,11 @@
           // draw polyline
           const points = [];
           for(const hid of (climb.holds||[])){
-            const ho = holdsMap.get(hid); if(!ho) continue; const cx = ho.x * rect.width; const cy = ho.y * rect.height; points.push(`${cx},${cy}`);
+            // try find by id first, then by hold name
+            let ho = holdsMap.get(hid);
+            if(!ho){ ho = (holdsData.holds||[]).find(h=> h.name === hid || h.id === hid); }
+            if(!ho) continue;
+            const cx = ho.x * rect.width; const cy = ho.y * rect.height; points.push(`${cx},${cy}`);
             const circle = document.createElementNS('http://www.w3.org/2000/svg','circle'); circle.setAttribute('cx', cx); circle.setAttribute('cy', cy); circle.setAttribute('r', 4); circle.setAttribute('fill','#ff5722'); circle.setAttribute('stroke','#fff'); circle.setAttribute('stroke-width',1.2);
             const text = document.createElementNS('http://www.w3.org/2000/svg','text'); text.setAttribute('x', cx+6); text.setAttribute('y', cy+4); text.setAttribute('fill','#111'); text.setAttribute('font-size',12); text.textContent = hid;
             overlay.appendChild(circle); overlay.appendChild(text);
