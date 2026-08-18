@@ -113,14 +113,18 @@
           const w = imgEl.naturalWidth && imgEl.naturalHeight ? rect.width : rect.width;
           const h = rect.height;
           overlay.setAttribute('width', rect.width); overlay.setAttribute('height', rect.height);
-          overlay.style.width = rect.width + 'px'; overlay.style.height = rect.height + 'px'; overlay.style.left = imgEl.offsetLeft + 'px'; overlay.style.top = imgEl.offsetTop + 'px';
+          overlay.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
+          overlay.setAttribute('preserveAspectRatio', 'none');
+          overlay.style.width = rect.width + 'px'; overlay.style.height = rect.height + 'px'; overlay.style.left = '0px'; overlay.style.top = '0px';
             // draw markers only (no connecting line) — large view: unfilled stroked circles so image shows through
+            const markerPoints = [];
             for(const hid of (climb.holds||[])){
               // try find by id first, then by hold name
               let ho = holdsMap.get(hid);
               if(!ho){ ho = (holdsData.holds||[]).find(h=> h.name === hid || h.id === hid); }
               if(!ho) continue;
               const cx = ho.x * rect.width; const cy = ho.y * rect.height;
+              markerPoints.push([cx, cy]);
               const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
               circle.setAttribute('cx', cx);
               circle.setAttribute('cy', cy);
@@ -129,6 +133,62 @@
               circle.setAttribute('stroke', '#ff5722');
               circle.setAttribute('stroke-width', 3);
               overlay.appendChild(circle);
+              // add label (name or id) next to marker, with light outline for contrast
+              const labelText = (ho.name && ho.name.trim()) ? ho.name : hid;
+              const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+              txt.setAttribute('x', cx + 12);
+              txt.setAttribute('y', cy + 4);
+              txt.setAttribute('fill', '#111');
+              txt.setAttribute('font-size', Math.max(12, Math.round(rect.width / 80)));
+              txt.setAttribute('stroke', '#fff');
+              txt.setAttribute('stroke-width', 2);
+              txt.setAttribute('paint-order', 'stroke');
+              txt.setAttribute('dominant-baseline', 'middle');
+              txt.textContent = labelText;
+              overlay.appendChild(txt);
+            }
+            // place notes box in the area with maximum minimum distance from markers
+            const notes = (climb.notes || '').trim();
+            if(notes){
+              const boxW = Math.min(Math.max(160, rect.width * 0.3), 380);
+              const boxH = Math.min(Math.max(40, rect.height * 0.12), 160);
+              const padding = 10;
+              const candidates = [
+                {x: padding, y: padding},
+                {x: rect.width - boxW - padding, y: padding},
+                {x: padding, y: rect.height - boxH - padding},
+                {x: rect.width - boxW - padding, y: rect.height - boxH - padding},
+                {x: (rect.width - boxW) / 2, y: padding},
+                {x: (rect.width - boxW) / 2, y: rect.height - boxH - padding}
+              ];
+              function rectPointDist(rx, ry, rw, rh, px, py){
+                const dx = Math.max(rx - px, 0, px - (rx + rw));
+                const dy = Math.max(ry - py, 0, py - (ry + rh));
+                return Math.hypot(dx, dy);
+              }
+              let best = candidates[0]; let bestScore = -1;
+              for(const c of candidates){
+                let minD = Infinity;
+                for(const p of markerPoints){ minD = Math.min(minD, rectPointDist(c.x, c.y, boxW, boxH, p[0], p[1])); }
+                if(minD > bestScore){ bestScore = minD; best = c; }
+              }
+              // draw a subtle rounded rect and text using SVG
+              const rectEl = document.createElementNS('http://www.w3.org/2000/svg','rect');
+              rectEl.setAttribute('x', best.x); rectEl.setAttribute('y', best.y);
+              rectEl.setAttribute('width', boxW); rectEl.setAttribute('height', boxH);
+              rectEl.setAttribute('rx', 8); rectEl.setAttribute('ry', 8);
+              rectEl.setAttribute('fill', 'white'); rectEl.setAttribute('fill-opacity', 0.85);
+              rectEl.setAttribute('stroke', '#ddd'); rectEl.setAttribute('stroke-width', 1);
+              overlay.appendChild(rectEl);
+              const lines = String(notes).split('\n');
+              const fontSize = Math.max(12, Math.min(16, Math.round(boxH / (lines.length + 1))));
+              for(let i=0;i<lines.length;i++){
+                const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+                t.setAttribute('x', best.x + 12); t.setAttribute('y', best.y + 12 + (i * (fontSize + 2)) + fontSize);
+                t.setAttribute('fill', '#111'); t.setAttribute('font-size', fontSize);
+                t.textContent = lines[i];
+                overlay.appendChild(t);
+              }
             }
         }
 
