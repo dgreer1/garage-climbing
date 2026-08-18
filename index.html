@@ -60,14 +60,20 @@
           </div>
         </div>
     </div>
-    <footer>Images loaded from the `www` folder. Add images under grade folders and run <code>python generate_manifest.py</code> to update.</footer>
+    <footer>Climbs shown are sourced from <a href="data/climbs.json">data/climbs.json</a>. Thumbnails use the canonical base image.</footer>
 
     <script>
       async function loadClimbs(){
-        const res = await fetch('www/climbs.json');
-        if(!res.ok) return [];
-        const data = await res.json();
-        return data.climbs || [];
+        // load climbs from the repository data folder so only declared climbs appear
+        try{
+          const res = await fetch('data/climbs.json');
+          if(!res.ok) return [];
+          const data = await res.json();
+          // ensure each climb has an image path for the card — use base image
+          return (data.climbs || []).map(c => Object.assign({ path: BASE_IMAGE }, c));
+        }catch(e){
+          return [];
+        }
       }
 
       function uniqueGrades(climbs){
@@ -75,15 +81,17 @@
         return Array.from(s).sort();
       }
 
-      function openModal(path, name){
+      // show modal using canonical base image and overlay the selected climb
+      const BASE_IMAGE = 'georef_image.jpg';
+      function openModal(climbName){
         const modal = document.getElementById('modal');
         const img = document.getElementById('modalImg');
-        img.src = path;
-        img.alt = name || '';
-          modal.classList.remove('hidden');
-          document.body.style.overflow = 'hidden';
-          // attempt to render route overlay if data available
-          setTimeout(()=> renderOverlayForClimb(name, img), 50);
+        img.src = BASE_IMAGE;
+        img.alt = climbName || '';
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        // attempt to render route overlay for the named climb on the base image
+        setTimeout(()=> renderOverlayForClimb(climbName, img), 50);
       }
 
         async function renderOverlayForClimb(climbName, imgEl){
@@ -155,7 +163,7 @@
         for(const c of filtered){
           const el = document.createElement('article'); el.className='card';
           const img = document.createElement('img'); img.src = c.path; img.alt = c.name; img.style.cursor = 'pointer';
-          img.addEventListener('click', ()=> openModal(c.path, c.name));
+          img.addEventListener('click', ()=> openModal(c.name));
           const meta = document.createElement('div'); meta.className='meta';
           const name = document.createElement('div'); name.className='name'; name.textContent = c.name;
           const grade = document.createElement('div'); grade.className='grade'; grade.textContent = c.grade;
