@@ -66,7 +66,7 @@
       async function loadClimbs(){
         // load climbs from the repository data folder so only declared climbs appear
         try{
-          const res = await fetch('data/climbs.json');
+          const res = await fetch('data/climbs.json?t=' + Date.now());
           if(!res.ok) return [];
           const data = await res.json();
           // ensure each climb has an image path for the card — use base image
@@ -99,10 +99,10 @@
           if(!overlay) return;
           // clear
           while(overlay.firstChild) overlay.removeChild(overlay.firstChild);
-          // try load data files from repo 'data' folder
+          // try load data files from repo 'data' folder (cache-bust to pick up edits)
           let holdsData = null; let climbsData = null;
-          try{ holdsData = await fetch('data/holds.json').then(r=> r.ok ? r.json() : null); }catch(e){}
-          try{ climbsData = await fetch('data/climbs.json').then(r=> r.ok ? r.json() : null); }catch(e){}
+          try{ holdsData = await fetch('data/holds.json?t=' + Date.now()).then(r=> r.ok ? r.json() : null); }catch(e){}
+          try{ climbsData = await fetch('data/climbs.json?t=' + Date.now()).then(r=> r.ok ? r.json() : null); }catch(e){}
           if(!holdsData || !climbsData) return;
           const climb = (climbsData.climbs||[]).find(c=> c.name === climbName || c.id === climbName);
           if(!climb) return;
@@ -114,19 +114,22 @@
           const h = rect.height;
           overlay.setAttribute('width', rect.width); overlay.setAttribute('height', rect.height);
           overlay.style.width = rect.width + 'px'; overlay.style.height = rect.height + 'px'; overlay.style.left = imgEl.offsetLeft + 'px'; overlay.style.top = imgEl.offsetTop + 'px';
-          // draw polyline
-          const points = [];
-          for(const hid of (climb.holds||[])){
-            // try find by id first, then by hold name
-            let ho = holdsMap.get(hid);
-            if(!ho){ ho = (holdsData.holds||[]).find(h=> h.name === hid || h.id === hid); }
-            if(!ho) continue;
-            const cx = ho.x * rect.width; const cy = ho.y * rect.height; points.push(`${cx},${cy}`);
-            const circle = document.createElementNS('http://www.w3.org/2000/svg','circle'); circle.setAttribute('cx', cx); circle.setAttribute('cy', cy); circle.setAttribute('r', 4); circle.setAttribute('fill','#ff5722'); circle.setAttribute('stroke','#fff'); circle.setAttribute('stroke-width',1.2);
-            const text = document.createElementNS('http://www.w3.org/2000/svg','text'); text.setAttribute('x', cx+6); text.setAttribute('y', cy+4); text.setAttribute('fill','#111'); text.setAttribute('font-size',12); text.textContent = hid;
-            overlay.appendChild(circle); overlay.appendChild(text);
-          }
-          if(points.length>1){ const pl = document.createElementNS('http://www.w3.org/2000/svg','polyline'); pl.setAttribute('points', points.join(' ')); pl.setAttribute('fill','none'); pl.setAttribute('stroke','#ff5722'); pl.setAttribute('stroke-width',2); pl.setAttribute('stroke-linecap','round'); pl.setAttribute('stroke-linejoin','round'); overlay.appendChild(pl); }
+            // draw markers only (no connecting line) — large view: unfilled stroked circles so image shows through
+            for(const hid of (climb.holds||[])){
+              // try find by id first, then by hold name
+              let ho = holdsMap.get(hid);
+              if(!ho){ ho = (holdsData.holds||[]).find(h=> h.name === hid || h.id === hid); }
+              if(!ho) continue;
+              const cx = ho.x * rect.width; const cy = ho.y * rect.height;
+              const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+              circle.setAttribute('cx', cx);
+              circle.setAttribute('cy', cy);
+              circle.setAttribute('r', 8);
+              circle.setAttribute('fill', 'none');
+              circle.setAttribute('stroke', '#ff5722');
+              circle.setAttribute('stroke-width', 3);
+              overlay.appendChild(circle);
+            }
         }
 
       function closeModal(){
@@ -161,20 +164,52 @@
         if(filtered.length===0){ empty.style.display='block'; return }
         empty.style.display='none';
         for(const c of filtered){
+          // build card with image + SVG overlay for thumbnail markers
           const el = document.createElement('article'); el.className='card';
-          const img = document.createElement('img'); img.src = c.path; img.alt = c.name; img.style.cursor = 'pointer';
+          const frame = document.createElement('div'); frame.style.position = 'relative'; frame.style.width = '100%';
+          const img = document.createElement('img'); img.src = c.path; img.alt = c.name; img.style.cursor = 'pointer'; img.style.display = 'block';
+          const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+          svg.style.position = 'absolute'; svg.style.left = 0; svg.style.top = 0; svg.style.pointerEvents = 'none'; svg.setAttribute('width','100%'); svg.setAttribute('height','100%');
+          // when image loads, set svg size and draw markers
+          img.addEventListener('load', async ()=>{
+            const rect = img.getBoundingClientRect();
+            svg.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
+            svg.style.width = rect.width + 'px'; svg.style.height = rect.height + 'px';
+            // clear existing
+            while(svg.firstChild) svg.removeChild(svg.firstChild);
+            // draw vibrant filled markers for thumbnail
+            try{
+              const holdsData = window.__holdsData || await fetch('data/holds.json?t=' + Date.now()).then(r=> r.ok ? r.json() : null);
+              if(holdsData && holdsData.holds){
+                const holdsMap = new Map(); holdsData.holds.forEach(h=> holdsMap.set(h.id, h));
+                for(const hid of (c.holds||[])){
+                  let ho = holdsMap.get(hid);
+                  if(!ho) ho = holdsData.holds.find(h=> h.name === hid || h.id === hid);
+                  if(!ho) continue;
+                  const cx = ho.x * rect.width; const cy = ho.y * rect.height;
+                  const circ = document.createElementNS('http://www.w3.org/2000/svg','circle');
+                  circ.setAttribute('cx', cx); circ.setAttribute('cy', cy); circ.setAttribute('r', 6);
+                  circ.setAttribute('fill', '#ff6f00'); circ.setAttribute('stroke', '#fff'); circ.setAttribute('stroke-width', 1.5);
+                  svg.appendChild(circ);
+                }
+              }
+            }catch(e){/* ignore */}
+          });
           img.addEventListener('click', ()=> openModal(c.name));
           const meta = document.createElement('div'); meta.className='meta';
           const name = document.createElement('div'); name.className='name'; name.textContent = c.name;
           const grade = document.createElement('div'); grade.className='grade'; grade.textContent = c.grade;
           meta.appendChild(name); meta.appendChild(grade);
-          el.appendChild(img); el.appendChild(meta);
+          frame.appendChild(img); frame.appendChild(svg);
+          el.appendChild(frame); el.appendChild(meta);
           grid.appendChild(el);
         }
       }
 
       (async function(){
         const climbs = await loadClimbs();
+        // preload holds data for thumbnail rendering
+        try{ window.__holdsData = await fetch('data/holds.json?t=' + Date.now()).then(r=> r.ok ? r.json() : null); }catch(e){ window.__holdsData = null }
         const grades = uniqueGrades(climbs);
         const gradeSelect = document.getElementById('gradeSelect');
         for(const g of grades){
