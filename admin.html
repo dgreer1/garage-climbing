@@ -15,8 +15,8 @@
     <div class="header">
       <div class="h-title">Garage Climbing — Admin</div>
       <div class="toolbar">
-        <button id="useRepoImg" class="btn">Use repo reference image</button>
-        <label class="btn small">Load image<input id="imgFile" type="file" accept="image/*" style="display:none" /></label>
+        <button id="useRepoImg" class="btn" title="Load the committed canonical wall image from the repository.">Use repo reference image</button>
+        <label class="btn small" title="Load a new wall photograph for control-point registration.">Load image<input id="imgFile" type="file" accept="image/*" style="display:none" /></label>
       </div>
     </div>
 
@@ -24,9 +24,9 @@
       <div class="left">
         <div class="controls">Mode: <strong>Register control points</strong> — <span id="modeInstructions">click on the image to add CPs</span></div>
           <div style="margin-top:0.5rem">
-            <button id="modeRegister" class="btn small">Register CPs</button>
-            <button id="modeHolds" class="btn small">Holds</button>
-            <button id="modeClimbs" class="btn small">Climbs</button>
+            <button id="modeRegister" class="btn small" title="Show and edit control points, including matching CPs on a new image.">Register CPs</button>
+            <button id="modeHolds" class="btn small" title="Show, add, move, and edit hold markers on the current image.">Holds</button>
+            <button id="modeClimbs" class="btn small" title="Create and edit climbs by recording ordered hold IDs.">Climbs</button>
           </div>
         <div class="image-wrap img-container" id="adminApp">
           <img id="wallImage" class="wall-img" src="georef_image.jpg" alt="wall reference" />
@@ -38,15 +38,15 @@
           <h3>Control Points</h3>
           <div id="cpList" class="cp-list"></div>
           <div class="actions" style="margin-top:0.5rem">
-            <button id="downloadCPs" class="btn small">Download control-points.json</button>
-            <label class="btn small">Import CPs<input id="importCPs" type="file" accept="application/json" style="display:none" /></label>
-            <button id="clearCPs" class="btn small">Clear CP local edits</button>
+            <button id="downloadCPs" class="btn small" title="Download the canonical control points as control-points.json.">Download control-points.json</button>
+            <label class="btn small" title="Import canonical control points from a JSON file.">Import CPs<input id="importCPs" type="file" accept="application/json" style="display:none" /></label>
+            <button id="clearCPs" class="btn small" title="Delete locally stored control-point edits from this browser.">Clear CP local edits</button>
           </div>
           <div style="margin-top:0.75rem">
             <input id="layoutName" placeholder="layout id (e.g. georef_v2)" style="width:160px" />
-            <button id="saveLayout" class="btn small">Save layout for this image</button>
-            <button id="applyLayout" class="btn small">Apply layout to holds</button>
-            <button id="downloadLayouts" class="btn small">Download layouts.json</button>
+            <button id="saveLayout" class="btn small" title="Calculate and save a transform from canonical CPs to the current image.">Save layout for this image</button>
+            <button id="applyLayout" class="btn small" title="Apply the selected saved layout to hold coordinates and download holds-updated.json.">Apply layout to holds</button>
+            <button id="downloadLayouts" class="btn small" title="Download all layouts saved in this browser as layouts.json.">Download layouts.json</button>
           </div>
         </div>
 
@@ -55,10 +55,10 @@
           <div id="holdList" class="cp-list"></div>
           <div id="holdProps" style="margin-top:0.5rem"></div>
           <div class="actions" style="margin-top:0.5rem">
-            <button id="clearHolds" class="btn small">Clear Hold local edits</button>
-            <button id="exportAll" class="btn small">Export all data (JSON)</button>
-            <button id="downloadHolds" class="btn small">Download holds.json</button>
-            <label class="btn small">Import Holds<input id="importHolds" type="file" accept="application/json" style="display:none" /></label>
+            <button id="clearHolds" class="btn small" title="Delete locally stored hold edits from this browser.">Clear Hold local edits</button>
+            <button id="exportAll" class="btn small" title="Download control points, holds, layouts, and climbs together as one project-data.json file.">Export all data (JSON)</button>
+            <button id="downloadHolds" class="btn small" title="Download the current hold data as holds.json.">Download holds.json</button>
+            <label class="btn small" title="Import hold IDs and normalized coordinates from a JSON file.">Import Holds<input id="importHolds" type="file" accept="application/json" style="display:none" /></label>
           </div>
         </div>
 
@@ -72,14 +72,14 @@
               <input id="climbGrade" placeholder="Grade" style="width:80px;margin-left:0.5rem" />
             </div>
             <div class="actions" style="margin-top:0.5rem">
-              <button id="startRecord" class="btn small">Start recording</button>
-              <button id="stopRecord" class="btn small" style="display:none">Stop recording</button>
-              <button id="saveClimb" class="btn small">Save climb</button>
+              <button id="startRecord" class="btn small" title="Start recording a climb by clicking hold markers in order.">Start recording</button>
+              <button id="stopRecord" class="btn small" style="display:none" title="Stop recording the current hold sequence.">Stop recording</button>
+              <button id="saveClimb" class="btn small" title="Save the climb name, grade, notes, and ordered hold sequence.">Save climb</button>
             </div>
             <div class="actions" style="margin-top:0.5rem">
-              <button id="newClimb" class="btn small">New climb</button>
-              <button id="downloadClimbs" class="btn small">Download climbs.json</button>
-              <label class="btn small">Import Climbs<input id="importClimbs" type="file" accept="application/json" style="display:none" /></label>
+              <button id="newClimb" class="btn small" title="Clear the climb editor so the next save creates a new climb.">New climb</button>
+              <button id="downloadClimbs" class="btn small" title="Download all climbs as climbs.json.">Download climbs.json</button>
+              <label class="btn small" title="Import climbs and their ordered hold IDs from a JSON file.">Import Climbs<input id="importClimbs" type="file" accept="application/json" style="display:none" /></label>
             </div>
           </div>
         </div>

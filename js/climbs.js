@@ -126,7 +126,7 @@ class ClimbApp{
     this.climbListEl.innerHTML = '';
     for(const c of this.climbs){
       const div = document.createElement('div'); div.className='cp-item';
-      div.innerHTML = `<div>${c.id} - ${c.name} (${c.grade})</div><div><button class='small' data-id='${c.id}'>View</button></div>`;
+      div.innerHTML = `<div>${c.id} - ${c.name} (${c.grade})</div><div><button class='small' title='Open this climb for editing its name, grade, notes, and hold sequence.' data-id='${c.id}'>View</button></div>`;
       this.climbListEl.appendChild(div);
       div.querySelector('button').addEventListener('click', ()=> this.selectClimb(c.id));
     }
@@ -139,13 +139,13 @@ class ClimbApp{
     if(this.nameInput) this.nameInput.value = this.selectedClimb.name || '';
     if(this.gradeInput) this.gradeInput.value = this.selectedClimb.grade || '';
     // show holds sequence with edit controls
-    const seqHtml = this.selectedClimb.holds.map((hid,idx)=> `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem"><div>${idx+1}. ${hid}</div><div><button class='small' data-idx='${idx}' data-action='up'>▲</button> <button class='small' data-idx='${idx}' data-action='down'>▼</button> <button class='small' data-idx='${idx}' data-action='remove'>Remove</button></div></div>`).join('');
+    const seqHtml = this.selectedClimb.holds.map((hid,idx)=> `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem"><div>${idx+1}. ${hid}</div><div><button class='small' title='Move this hold one position earlier in the climb.' data-idx='${idx}' data-action='up'>▲</button> <button class='small' title='Move this hold one position later in the climb.' data-idx='${idx}' data-action='down'>▼</button> <button class='small' title='Remove this hold from the climb sequence.' data-idx='${idx}' data-action='remove'>Remove</button></div></div>`).join('');
     this.climbPropsEl.innerHTML = `<div><strong>${this.selectedClimb.id} - Editing</strong></div>
       <div style="margin-top:0.5rem"><strong>Sequence</strong></div>
       <div id="climbSeq" style="margin-top:0.5rem">${seqHtml}</div>
-      <div style="margin-top:0.5rem"><button id="addHoldToClimb" class="btn small">Add hold (click markers)</button></div>
+      <div style="margin-top:0.5rem"><button id="addHoldToClimb" class="btn small" title="Toggle mode for adding another hold by clicking its marker on the image.">Add hold (click markers)</button></div>
       <div style="margin-top:0.5rem">Notes: <textarea id="climbNotes">${this.selectedClimb.notes||''}</textarea></div>
-      <div style="margin-top:0.5rem"><button id="climbSaveNotes" class="btn small">Save changes</button> <button id="climbDelete" class="btn small">Delete</button></div>`;
+      <div style="margin-top:0.5rem"><button id="climbSaveNotes" class="btn small" title="Save changes to this climb's notes, name, grade, and metadata.">Save changes</button> <button id="climbDelete" class="btn small" title="Delete this climb from the local editor data.">Delete</button></div>`;
     // sequence control handlers
     const seqEl = document.getElementById('climbSeq');
     seqEl.querySelectorAll('button').forEach(btn=>{

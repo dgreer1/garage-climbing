@@ -112,7 +112,7 @@ class RegistrationApp{
     for(const cp of this.cps){
       const assigned = this.photoCps[cp.id] ? ` — photo: (${this.photoCps[cp.id].x.toFixed(3)}, ${this.photoCps[cp.id].y.toFixed(3)})` : '';
       const div = document.createElement('div'); div.className='cp-item';
-      div.innerHTML = `<div>${cp.id} (${cp.x.toFixed(3)}, ${cp.y.toFixed(3)})${assigned}</div><div><button class="small" data-id="${cp.id}" data-action="move">Move</button> <button class="small" data-id="${cp.id}" data-action="delete">Delete</button> <button class="small" data-id="${cp.id}" data-action="setphoto">Set on image</button></div>`;
+      div.innerHTML = `<div>${cp.id} (${cp.x.toFixed(3)}, ${cp.y.toFixed(3)})${assigned}</div><div><button class="small" title="Move this canonical control point on the reference image." data-id="${cp.id}" data-action="move">Move</button> <button class="small" title="Delete this canonical control point." data-id="${cp.id}" data-action="delete">Delete</button> <button class="small" title="Choose this CP, then click its matching location on the currently loaded image." data-id="${cp.id}" data-action="setphoto">Set on image</button></div>`;
       this.cpListEl.appendChild(div);
       div.querySelectorAll('button').forEach(btn=>{
         const action = btn.dataset.action;

@@ -135,7 +135,7 @@ class HoldsApp{
       const leftHtml = isSelected
         ? `<input class="hold-name" data-id="${h.id}" value="${displayName}" style="width:140px;margin-right:0.5rem" /> ${h.gridRef?('['+h.gridRef+']'):''} ${h.active? '':'(inactive)'} `
         : `<span class="hold-name-display" data-id="${h.id}" style="display:inline-block;width:140px;margin-right:0.5rem">${displayName}</span> ${h.gridRef?('['+h.gridRef+']'):''} ${h.active? '':'(inactive)'} `;
-      div.innerHTML = `<div>${leftHtml}</div><div><button class='small' data-id='${h.id}' data-action='select'>Select</button></div>`;
+      div.innerHTML = `<div>${leftHtml}</div><div><button class='small' title='Select this hold to edit its name, colour, grid reference, notes, or active state.' data-id='${h.id}' data-action='select'>Select</button></div>`;
       this.holdListEl.appendChild(div);
       if(isSelected){
         const nameInput = div.querySelector('.hold-name');
