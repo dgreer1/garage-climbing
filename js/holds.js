@@ -148,7 +148,9 @@ class HoldsApp{
     // markers grouped with class 'hold-marker'
     const existing = Array.from(this.svg.querySelectorAll('.hold-marker')); existing.forEach(n=>n.remove());
     const rect = this.img.getBoundingClientRect(); const w = rect.width || Number(this.svg.getAttribute('width'))||800; const h = rect.height || Number(this.svg.getAttribute('height'))||600;
-    for(const ho of this.holds){
+    // only render hold markers in holds mode
+    if(this.mode === 'holds'){
+      for(const ho of this.holds){
       const cx = ho.x * w; const cy = ho.y * h;
       const g = document.createElementNS('http://www.w3.org/2000/svg','g'); g.classList.add('hold-marker');
       const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
@@ -156,6 +158,7 @@ class HoldsApp{
       const text = document.createElementNS('http://www.w3.org/2000/svg','text'); text.setAttribute('x', cx+8); text.setAttribute('y', cy+4); text.setAttribute('fill','#111'); text.setAttribute('font-size',10); text.textContent = (ho.name && ho.name.length>0) ? ho.name : ho.id;
       g.appendChild(circle); g.appendChild(text);
       this.svg.appendChild(g);
+      }
     }
     // render selected hold props
     if(this.selectedHold) this.renderProps(this.selectedHold);

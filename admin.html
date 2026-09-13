@@ -42,6 +42,12 @@
             <label class="btn small">Import CPs<input id="importCPs" type="file" accept="application/json" style="display:none" /></label>
             <button id="clearCPs" class="btn small">Clear CP local edits</button>
           </div>
+          <div style="margin-top:0.75rem">
+            <input id="layoutName" placeholder="layout id (e.g. georef_v2)" style="width:160px" />
+            <button id="saveLayout" class="btn small">Save layout for this image</button>
+            <button id="applyLayout" class="btn small">Apply layout to holds</button>
+            <button id="downloadLayouts" class="btn small">Download layouts.json</button>
+          </div>
         </div>
 
         <div id="holdsSection" class="section hidden">
