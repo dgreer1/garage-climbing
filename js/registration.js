@@ -335,8 +335,9 @@ window.addEventListener('DOMContentLoaded', ()=>{
     if(btnC) btnC.classList.toggle('active', mode==='climbs');
     // set registration app mode
     if(window.regApp) window.regApp.mode = (mode==='register') ? 'register' : 'other';
+    if(window.regApp) window.regApp.renderSVG();
     // set holds app mode if present
-    if(window.holdsApp) window.holdsApp.mode = mode==='holds' ? 'holds' : 'register';
+    if(window.holdsApp) window.holdsApp.mode = (mode==='holds' || mode==='climbs') ? mode : 'register';
     if(window.holdsApp) window.holdsApp.render();
     // show/hide right-side sections
     const cpSec = document.getElementById('cpSection');

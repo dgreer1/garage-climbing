@@ -16,6 +16,7 @@ class HoldsApp{
     this.holds = [];
     this.mode = 'register'; // 'register' or 'holds'
     this.dragging = null; // {id, offsetX, offsetY}
+    this.movingHoldId = null;
     this.undoStack = [];
 
     this.setup();
@@ -68,6 +69,18 @@ class HoldsApp{
     const rect = this.img.getBoundingClientRect();
     const x = (e.clientX - rect.left)/rect.width; const y = (e.clientY - rect.top)/rect.height;
     if(x<0||x>1||y<0||y>1) return;
+    if(this.movingHoldId){
+      const hold = this.holds.find(h=>h.id===this.movingHoldId);
+      if(hold){
+        hold.x = Number(x.toFixed(6));
+        hold.y = Number(y.toFixed(6));
+        this.pushUndo({type:'move', hold:hold.id});
+        this.save();
+      }
+      this.movingHoldId = null;
+      this.render();
+      return;
+    }
     // add new hold
     const id = this.nextId();
     const h = { id:id, x:Number(x.toFixed(6)), y:Number(y.toFixed(6)), colour:'blue', gridRef:'', notes:'', active:true };
@@ -135,27 +148,36 @@ class HoldsApp{
       const leftHtml = isSelected
         ? `<input class="hold-name" data-id="${h.id}" value="${displayName}" style="width:140px;margin-right:0.5rem" /> ${h.gridRef?('['+h.gridRef+']'):''} ${h.active? '':'(inactive)'} `
         : `<span class="hold-name-display" data-id="${h.id}" style="display:inline-block;width:140px;margin-right:0.5rem">${displayName}</span> ${h.gridRef?('['+h.gridRef+']'):''} ${h.active? '':'(inactive)'} `;
-      div.innerHTML = `<div>${leftHtml}</div><div><button class='small' title='Select this hold to edit its name, colour, grid reference, notes, or active state.' data-id='${h.id}' data-action='select'>Select</button></div>`;
+      div.innerHTML = `<div>${leftHtml}</div><div><button class='small' title='Select this hold to edit its name, colour, grid reference, notes, or active state.' data-id='${h.id}' data-action='select'>Select</button> <button class='small' title='Move this hold by clicking its new location on the image.' data-id='${h.id}' data-action='move'>Move</button></div>`;
       this.holdListEl.appendChild(div);
       if(isSelected){
         const nameInput = div.querySelector('.hold-name');
         nameInput.addEventListener('change', (ev)=>{ const v = ev.target.value.trim(); const ho = this.holds.find(x=>x.id===h.id); if(ho){ ho.name = v || ho.id; this.save(); this.render(); } });
       }
-      div.querySelector('button').addEventListener('click', ()=> this.selectHold(h.id));
+      div.querySelectorAll('button').forEach(button=>{
+        if(button.dataset.action === 'select') button.addEventListener('click', ()=> this.selectHold(h.id));
+        if(button.dataset.action === 'move') button.addEventListener('click', ()=> this.startMoveLocation(h.id));
+      });
     }
     // render SVG markers (keep CPs already drawn by regApp, so we append holds)
     // remove existing hold markers
     // markers grouped with class 'hold-marker'
     const existing = Array.from(this.svg.querySelectorAll('.hold-marker')); existing.forEach(n=>n.remove());
     const rect = this.img.getBoundingClientRect(); const w = rect.width || Number(this.svg.getAttribute('width'))||800; const h = rect.height || Number(this.svg.getAttribute('height'))||600;
-    // only render hold markers in holds mode
-    if(this.mode === 'holds'){
+    // render holds in Holds mode and Climbs mode; CP mode remains marker-free
+    if(this.mode === 'holds' || this.mode === 'climbs'){
+      const selectedIds = new Set(
+        this.mode === 'climbs' && window.climbApp && window.climbApp.selectedClimb
+          ? window.climbApp.selectedClimb.holds
+          : []
+      );
       for(const ho of this.holds){
       const cx = ho.x * w; const cy = ho.y * h;
       const g = document.createElementNS('http://www.w3.org/2000/svg','g'); g.classList.add('hold-marker');
       const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
-      circle.setAttribute('cx', cx); circle.setAttribute('cy', cy); circle.setAttribute('r', 3); circle.setAttribute('fill', ho.colour||'blue'); circle.setAttribute('stroke','#fff'); circle.setAttribute('stroke-width',1);
-      const text = document.createElementNS('http://www.w3.org/2000/svg','text'); text.setAttribute('x', cx+8); text.setAttribute('y', cy+4); text.setAttribute('fill','#111'); text.setAttribute('font-size',10); text.textContent = (ho.name && ho.name.length>0) ? ho.name : ho.id;
+      const selected = selectedIds.has(ho.id) || selectedIds.has(ho.name);
+      circle.setAttribute('cx', cx); circle.setAttribute('cy', cy); circle.setAttribute('r', selected ? 5 : 3); circle.setAttribute('fill', selected ? '#ff6f00' : (this.mode === 'climbs' ? '#9ca3af' : (ho.colour||'blue'))); circle.setAttribute('stroke', selected ? '#fff' : '#fff'); circle.setAttribute('stroke-width', selected ? 2 : 1); circle.setAttribute('opacity', this.mode === 'climbs' && !selected ? '0.45' : '1');
+      const text = document.createElementNS('http://www.w3.org/2000/svg','text'); text.setAttribute('x', cx+8); text.setAttribute('y', cy+4); text.setAttribute('fill', selected ? '#111' : '#6b7280'); text.setAttribute('font-size', selected ? 11 : 10); text.setAttribute('opacity', this.mode === 'climbs' && !selected ? '0.45' : '1'); text.textContent = (ho.name && ho.name.length>0) ? ho.name : ho.id;
       g.appendChild(circle); g.appendChild(text);
       this.svg.appendChild(g);
       }
@@ -168,6 +190,16 @@ class HoldsApp{
     this.selectedHold = this.holds.find(h=>h.id===id);
     this.render();
     this.renderProps(this.selectedHold);
+  }
+
+  startMoveLocation(id){
+    this.movingHoldId = this.movingHoldId === id ? null : id;
+    if(window.regApp && window.regApp.instructionsEl){
+      window.regApp.instructionsEl.textContent = this.movingHoldId
+        ? `Move ${id}: click the image to set its new location`
+        : 'Holds mode: click to add holds; drag to move; select to edit';
+    }
+    this.render();
   }
 
   renderProps(h){

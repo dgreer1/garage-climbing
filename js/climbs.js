@@ -135,6 +135,8 @@ class ClimbApp{
   selectClimb(id){
     this.selectedClimb = this.climbs.find(c=>c.id===id);
     if(!this.selectedClimb) return;
+    if(window.holdsApp) window.holdsApp.mode = 'climbs';
+    if(window.holdsApp) window.holdsApp.render();
     // populate editor inputs
     if(this.nameInput) this.nameInput.value = this.selectedClimb.name || '';
     if(this.gradeInput) this.gradeInput.value = this.selectedClimb.grade || '';

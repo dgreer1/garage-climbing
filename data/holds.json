@@ -61,16 +61,6 @@
       "name": "Blue 4"
     },
     {
-      "id": "H007",
-      "x": 0.357015,
-      "y": 0.259212,
-      "colour": "blue",
-      "gridRef": "",
-      "notes": "Top of the Dawn Wall",
-      "active": true,
-      "name": "Blue Top"
-    },
-    {
       "id": "H008",
       "x": 0.363771,
       "y": 0.364534,
@@ -92,8 +82,8 @@
     },
     {
       "id": "H010",
-      "x": 0.172986,
-      "y": 0.524035,
+      "x": 0.189964,
+      "y": 0.531427,
       "colour": "yellow",
       "gridRef": "L3",
       "notes": "",
@@ -102,8 +92,8 @@
     },
     {
       "id": "H011",
-      "x": 0.244458,
-      "y": 0.682673,
+      "x": 0.243728,
+      "y": 0.687974,
       "colour": "yellow",
       "gridRef": "T4",
       "notes": "",
@@ -139,6 +129,16 @@
       "notes": "",
       "active": true,
       "name": "Yellow 5"
+    },
+    {
+      "id": "H007",
+      "x": 0.491039,
+      "y": 0.366712,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Hello Kitty"
     }
   ]
 }

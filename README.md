@@ -1,6 +1,17 @@
 # garage-climbing
 A website for our garage climbing wall, with all the climbing challenges, routes and problems to try.
 
+## Open the Site
+
+- Local development: <http://localhost:8000/index.html>
+- Deployed GitHub Pages site: <https://dgreer1.github.io/garage-climbing/>
+
+Start the local server from the project root with:
+
+```bash
+python -m http.server 8000
+```
+
 ## Working with a New Wall Image
 
 The site stores hold positions as normalized coordinates on the canonical wall image, `georef_image.jpg`. If you replace that image with a new photograph, do not move the holds by eye. Register the new photograph with control points (CPs), calculate a transform, and then use the transformed hold coordinates with the new image.
