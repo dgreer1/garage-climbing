@@ -30,6 +30,8 @@ Use **Move** only if a canonical CP itself was recorded incorrectly. Moving a CP
 
 **Move** changes the canonical CP. **Set on image** records where that same CP appears in the currently loaded photograph. The second operation is what supplies the correspondence used for the image transform.
 
+Click **Download control-points.json** after matching points. It now includes the original `controlPoints` plus an `imageControlPoints` array containing each matched CP's canonical and new-image coordinates. **Download image CPs** produces the smaller registration-only export as `image-control-points.json`. These exports are useful for checking whether the new-image points were recorded correctly before calculating a layout.
+
 ### 4. Save the registration
 
 Enter a layout id, such as `wall-2026-09`, and click **Save layout for this image**. The admin tool calculates a projective transform (homography) from the canonical CPs to the new image and downloads `layouts-<id>.json`.

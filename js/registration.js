@@ -15,6 +15,7 @@ class RegistrationApp{
     this.editingId = null; // id of CP being moved
     this.photoCps = {}; // per-photo control points when registering an image (id -> {x,y})
     this.editingPhotoCpId = null; // which canonical CP id is being assigned on next click
+    this.currentImageName = DEFAULT_IMG;
     this.instructionsEl = document.getElementById('modeInstructions');
     this.setup();
   }
@@ -33,9 +34,11 @@ class RegistrationApp{
     if(this.root) this.root.addEventListener('click', (e)=>this.onImageClick(e));
     window.addEventListener('resize', ()=>this.syncSVGSize());
     this.imgEl.addEventListener('load', ()=>{ this.syncSVGSize(); this.renderList(); });
-    document.getElementById('useRepoImg').addEventListener('click', ()=>{ this.imgEl.src = DEFAULT_IMG; });
-    document.getElementById('imgFile').addEventListener('change', (e)=>{ const f = e.target.files[0]; if(!f) return; const url = URL.createObjectURL(f); this.imgEl.src = url; });
-    document.getElementById('downloadCPs').addEventListener('click', ()=> downloadJSON('control-points.json',{controlPoints:this.cps}));
+    document.getElementById('useRepoImg').addEventListener('click', ()=>{ this.currentImageName = DEFAULT_IMG; this.photoCps = {}; this.imgEl.src = DEFAULT_IMG; this.renderList(); });
+    document.getElementById('imgFile').addEventListener('change', (e)=>{ const f = e.target.files[0]; if(!f) return; this.currentImageName = f.name; this.photoCps = {}; const url = URL.createObjectURL(f); this.imgEl.src = url; this.renderList(); });
+    document.getElementById('downloadCPs').addEventListener('click', ()=> this.downloadCanonicalCPs());
+    const downloadImageCPs = document.getElementById('downloadImageCPs');
+    if(downloadImageCPs) downloadImageCPs.addEventListener('click', ()=> this.downloadImageCPs());
     document.getElementById('importCPs').addEventListener('change', (e)=>{ const f = e.target.files[0]; if(!f) return; readFileInput(f, (d)=>{ if(d.controlPoints) { this.cps = d.controlPoints; this.saveLocal(); this.renderList(); } else alert('No controlPoints array found'); }); });
     // layouts (per-image) save/load
     const saveLayoutBtn = document.getElementById('saveLayout'); if(saveLayoutBtn) saveLayoutBtn.addEventListener('click', ()=> this.saveLayoutForImage());
@@ -96,6 +99,40 @@ class RegistrationApp{
   setPhotoCpPending(id){ this.editingPhotoCpId = id; if(this.instructionsEl) this.instructionsEl.textContent = `Assign ${id}: click on the image to set its position for this photo`; }
 
   assignPhotoCpAt(x,y){ if(!this.editingPhotoCpId) return; this.photoCps[this.editingPhotoCpId] = { x: Number(x.toFixed(6)), y: Number(y.toFixed(6)) }; this.editingPhotoCpId = null; if(this.instructionsEl) this.instructionsEl.textContent = 'click on the image to add CPs'; this.renderList(); }
+
+  downloadCanonicalCPs(){
+    const imageControlPoints = this.cps
+      .filter(cp => this.photoCps[cp.id])
+      .map(cp => ({
+        id: cp.id,
+        canonical: { x: cp.x, y: cp.y },
+        image: { x: this.photoCps[cp.id].x, y: this.photoCps[cp.id].y }
+      }));
+    const exportData = { controlPoints: this.cps };
+    if(imageControlPoints.length > 0){
+      exportData.image = this.currentImageName;
+      exportData.imageControlPoints = imageControlPoints;
+    }
+    downloadJSON('control-points.json', exportData);
+  }
+
+  downloadImageCPs(){
+    const imageControlPoints = this.cps
+      .filter(cp => this.photoCps[cp.id])
+      .map(cp => ({
+        id: cp.id,
+        canonical: { x: cp.x, y: cp.y },
+        image: { x: this.photoCps[cp.id].x, y: this.photoCps[cp.id].y }
+      }));
+    if(imageControlPoints.length === 0){
+      alert('No image control points have been assigned. Click Set on image for each CP, then click its position on the image.');
+      return;
+    }
+    downloadJSON('image-control-points.json', {
+      image: this.currentImageName,
+      imageControlPoints
+    });
+  }
 
   nextId(){
     const existing = this.cps.map(c=>c.id).filter(Boolean);
@@ -202,7 +239,7 @@ class RegistrationApp{
     const H = computeHomography(src, dst); // maps canonical -> photo
     if(!H) return alert('Failed to compute transform');
     const layouts = this.loadLayouts() || {};
-    layouts[id] = { image: imgSrc, pairs: pairs, H: H };
+    layouts[id] = { image: this.currentImageName || imgSrc, pairs: pairs, H: H };
     this.saveLayouts(layouts);
     downloadJSON('layouts-'+id+'.json', layouts[id]);
     alert('Layout saved locally and downloaded. Commit to repo as data/layouts.json if desired.');
