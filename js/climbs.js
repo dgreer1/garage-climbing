@@ -6,7 +6,10 @@ class ClimbApp{
     this.climbListEl = document.getElementById('climbList');
     this.climbPropsEl = document.getElementById('climbProps');
     this.nameInput = document.getElementById('climbName');
+    this.categoryInput = document.getElementById('climbCategory');
     this.gradeInput = document.getElementById('climbGrade');
+    this.levelInput = document.getElementById('climbLevel');
+    this.numberInput = document.getElementById('climbNumber');
     this.startBtn = document.getElementById('startRecord');
     this.stopBtn = document.getElementById('stopRecord');
     this.saveBtn = document.getElementById('saveClimb');
@@ -31,6 +34,7 @@ class ClimbApp{
   }
 
   attach(){
+    if(this.categoryInput) this.categoryInput.addEventListener('change', ()=> this.updateCategoryFields());
     if(this.startBtn) this.startBtn.addEventListener('click', ()=> this.startRecording());
     if(this.stopBtn) this.stopBtn.addEventListener('click', ()=> this.stopRecording());
     if(this.saveBtn) this.saveBtn.addEventListener('click', ()=> this.saveClimb());
@@ -39,6 +43,14 @@ class ClimbApp{
     if(this.importInput) this.importInput.addEventListener('change', (e)=>{ const f = e.target.files[0]; if(!f) return; readFileInput(f, (d)=>{ if(d.climbs){ this.climbs = d.climbs; this.save(); this.render(); } else alert('No climbs array found'); }); });
     // capture hold clicks when recording or in add-hold mode
     document.addEventListener('click', (e)=> this.onDocClick(e), true);
+    this.updateCategoryFields();
+  }
+
+  updateCategoryFields(){
+    const kids = this.categoryInput && this.categoryInput.value === 'kids';
+    if(this.gradeInput) this.gradeInput.style.display = kids ? 'none' : '';
+    if(this.levelInput) this.levelInput.style.display = kids ? '' : 'none';
+    if(this.numberInput) this.numberInput.style.display = kids ? '' : 'none';
   }
 
   async onDocClick(e){
@@ -89,7 +101,16 @@ class ClimbApp{
     // If editing an existing climb, update it
     if(this.selectedClimb){
       this.selectedClimb.name = name || this.selectedClimb.id;
+      this.selectedClimb.category = this.categoryInput && this.categoryInput.value === 'kids' ? 'kids' : 'adults';
       this.selectedClimb.grade = grade;
+      if(this.selectedClimb.category === 'kids'){
+        this.selectedClimb.kidsLevel = Math.max(1, Number(this.levelInput.value) || 1);
+        this.selectedClimb.kidsNumber = Math.max(1, Number(this.numberInput.value) || 1);
+        delete this.selectedClimb.grade;
+      } else {
+        delete this.selectedClimb.kidsLevel;
+        delete this.selectedClimb.kidsNumber;
+      }
       this.selectedClimb.notes = document.getElementById('climbNotes') ? document.getElementById('climbNotes').value : (this.selectedClimb.notes||'');
       // if currentSequence has items (from recording), replace holds; otherwise keep existing
       if(this.currentSequence.length>0) this.selectedClimb.holds = this.currentSequence.slice();
@@ -102,12 +123,22 @@ class ClimbApp{
 
     if(this.currentSequence.length===0){ if(!confirm('Sequence is empty. Save empty climb?')) return; }
     const id = this.nextId();
-    const climb = { id, name: name || id, grade, holds: this.currentSequence.slice(), notes:'', createdAt:new Date().toISOString() };
+    const category = this.categoryInput && this.categoryInput.value === 'kids' ? 'kids' : 'adults';
+    const climb = { id, name: name || id, category, holds: this.currentSequence.slice(), notes:'', createdAt:new Date().toISOString() };
+    if(category === 'kids'){
+      climb.kidsLevel = Math.max(1, Number(this.levelInput.value) || 1);
+      climb.kidsNumber = Math.max(1, Number(this.numberInput.value) || 1);
+    } else {
+      climb.grade = grade;
+    }
     this.climbs.push(climb);
     this.save(); this.render();
     this.currentSequence = [];
     this.renderRecording();
     if(this.nameInput) this.nameInput.value=''; if(this.gradeInput) this.gradeInput.value='';
+    if(this.categoryInput) this.categoryInput.value='adults';
+    if(this.levelInput) this.levelInput.value=''; if(this.numberInput) this.numberInput.value='';
+    this.updateCategoryFields();
   }
 
   newClimb(){
@@ -117,6 +148,10 @@ class ClimbApp{
     this.addHoldMode = false;
     if(this.nameInput) this.nameInput.value='';
     if(this.gradeInput) this.gradeInput.value='';
+    if(this.categoryInput) this.categoryInput.value='adults';
+    if(this.levelInput) this.levelInput.value='';
+    if(this.numberInput) this.numberInput.value='';
+    this.updateCategoryFields();
     if(this.climbPropsEl) this.climbPropsEl.innerHTML = '';
     this.renderRecording();
     this.render();
@@ -126,7 +161,8 @@ class ClimbApp{
     this.climbListEl.innerHTML = '';
     for(const c of this.climbs){
       const div = document.createElement('div'); div.className='cp-item';
-      div.innerHTML = `<div>${c.id} - ${c.name} (${c.grade})</div><div><button class='small' title='Open this climb for editing its name, grade, notes, and hold sequence.' data-id='${c.id}'>View</button></div>`;
+      const categoryLabel = c.category === 'kids' ? `Kids L${c.kidsLevel || 1} #${c.kidsNumber || 1}` : `Adults ${c.grade || ''}`;
+      div.innerHTML = `<div>${c.id} - ${c.name} (${categoryLabel})</div><div><button class='small' title='Open this climb for editing its category, difficulty, notes, and hold sequence.' data-id='${c.id}'>View</button></div>`;
       this.climbListEl.appendChild(div);
       div.querySelector('button').addEventListener('click', ()=> this.selectClimb(c.id));
     }
@@ -140,6 +176,10 @@ class ClimbApp{
     // populate editor inputs
     if(this.nameInput) this.nameInput.value = this.selectedClimb.name || '';
     if(this.gradeInput) this.gradeInput.value = this.selectedClimb.grade || '';
+    if(this.categoryInput) this.categoryInput.value = this.selectedClimb.category === 'kids' ? 'kids' : 'adults';
+    if(this.levelInput) this.levelInput.value = this.selectedClimb.kidsLevel || '';
+    if(this.numberInput) this.numberInput.value = this.selectedClimb.kidsNumber || '';
+    this.updateCategoryFields();
     // show holds sequence with edit controls
     const seqHtml = this.selectedClimb.holds.map((hid,idx)=> `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem"><div>${idx+1}. ${hid}</div><div><button class='small' title='Move this hold one position earlier in the climb.' data-idx='${idx}' data-action='up'>▲</button> <button class='small' title='Move this hold one position later in the climb.' data-idx='${idx}' data-action='down'>▼</button> <button class='small' title='Remove this hold from the climb sequence.' data-idx='${idx}' data-action='remove'>Remove</button></div></div>`).join('');
     this.climbPropsEl.innerHTML = `<div><strong>${this.selectedClimb.id} - Editing</strong></div>

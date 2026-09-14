@@ -12,6 +12,13 @@
       body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(180deg,#eef2ff,var(--bg));color:#111}
       header{padding:2rem 1rem;text-align:center}
       h1{margin:0;font-size:1.75rem}
+      .category-picker{min-height:55vh;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem;align-items:center;max-width:760px;margin:2rem auto;padding:1rem}
+      .category-button{min-height:220px;border:0;border-radius:18px;background:#fff;box-shadow:0 10px 28px rgba(16,24,40,0.12);font-size:clamp(2rem,6vw,4rem);font-weight:800;cursor:pointer;color:#172554}
+      .category-button:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(16,24,40,0.18)}
+      .category-button.kids{background:#fff7ed;color:#9a3412}
+      .category-button.adults{background:#eff6ff;color:#1e3a8a}
+      .hidden{display:none!important}
+      .back-button{margin:1rem auto 0;display:block;padding:0.5rem 0.8rem;border:1px solid #d1d5db;border-radius:8px;background:#fff;cursor:pointer}
       .controls{display:flex;gap:0.75rem;justify-content:center;align-items:center;margin-top:0.75rem}
       select,input{padding:0.5rem 0.75rem;border-radius:8px;border:1px solid #e5e7eb}
       main{max-width:1100px;margin:1rem auto;padding:1rem}
@@ -29,6 +36,8 @@
       .modal-content img{max-width:calc(100vw - 6rem);max-height:calc(100vh - 6rem);width:auto;height:auto;border-radius:8px;box-shadow:0 20px 40px rgba(2,6,23,0.6);object-fit:contain}
       .modal-close{position:fixed;top:1rem;left:1rem;background:#fff;border-radius:999px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:0 8px 20px rgba(2,6,23,0.2);cursor:pointer}
       @media (max-width:600px){
+        .category-picker{grid-template-columns:1fr;min-height:auto;margin-top:1rem}
+        .category-button{min-height:150px}
         .modal{padding:1rem}
         .modal-content img{max-width:calc(100vw - 3rem);max-height:calc(100vh - 3rem)}
         .modal-close{top:0.5rem;left:0.5rem;width:36px;height:36px;font-size:16px}
@@ -39,14 +48,19 @@
   <body>
     <header>
       <h1>Garage Climbing — Routes</h1>
-      <div class="controls">
+      <div id="categoryPicker" class="category-picker">
+        <button class="category-button kids" data-category="kids">Kids</button>
+        <button class="category-button adults" data-category="adults">Adults</button>
+      </div>
+      <button id="backToCategories" class="back-button hidden">Back to Kids / Adults</button>
+      <div id="routeControls" class="controls hidden">
         <label for="gradeSelect">Grade:</label>
         <select id="gradeSelect"><option value="all">All</option></select>
         <label for="search">Name:</label>
         <input id="search" placeholder="Filter by name" />
       </div>
     </header>
-    <main>
+    <main id="routeMain" class="hidden">
       <div id="grid" class="grid" aria-live="polite"></div>
       <div id="empty" class="empty" style="display:none">No climbs found.</div>
     </main>
@@ -79,6 +93,13 @@
       function uniqueGrades(climbs){
         const s = new Set(climbs.map(c=>c.grade));
         return Array.from(s).sort();
+      }
+
+      function climbCategory(climb){ return climb.category === 'kids' ? 'kids' : 'adults'; }
+
+      function routeLabel(climb){
+        if(climbCategory(climb) === 'kids') return `Level ${climb.kidsLevel || 1} · Climb ${climb.kidsNumber || 1}`;
+        return climb.grade || 'Ungraded';
       }
 
       // show modal using canonical base image and overlay the selected climb
@@ -258,7 +279,7 @@
           img.addEventListener('click', ()=> openModal(c.name));
           const meta = document.createElement('div'); meta.className='meta';
           const name = document.createElement('div'); name.className='name'; name.textContent = c.name;
-          const grade = document.createElement('div'); grade.className='grade'; grade.textContent = c.grade;
+          const grade = document.createElement('div'); grade.className='grade'; grade.textContent = routeLabel(c);
           meta.appendChild(name); meta.appendChild(grade);
           frame.appendChild(img); frame.appendChild(svg);
           el.appendChild(frame); el.appendChild(meta);
@@ -270,13 +291,44 @@
         const climbs = await loadClimbs();
         // preload holds data for thumbnail rendering
         try{ window.__holdsData = await fetch('data/holds.json?t=' + Date.now()).then(r=> r.ok ? r.json() : null); }catch(e){ window.__holdsData = null }
-        const grades = uniqueGrades(climbs);
+        const categoryPicker = document.getElementById('categoryPicker');
+        const routeMain = document.getElementById('routeMain');
+        const routeControls = document.getElementById('routeControls');
+        const backButton = document.getElementById('backToCategories');
         const gradeSelect = document.getElementById('gradeSelect');
-        for(const g of grades){
-          const opt = document.createElement('option'); opt.value=g; opt.textContent=g; gradeSelect.appendChild(opt);
-        }
         const searchInput = document.getElementById('search');
-        function update(){ render(climbs, gradeSelect.value, searchInput.value.trim()) }
+        let selectedCategory = null;
+        function update(){
+          const categoryClimbs = climbs
+            .filter(c=>climbCategory(c) === selectedCategory)
+            .sort((a,b)=> selectedCategory === 'kids'
+              ? ((Number(a.kidsLevel)||1) - (Number(b.kidsLevel)||1)) || ((Number(a.kidsNumber)||1) - (Number(b.kidsNumber)||1))
+              : String(a.name).localeCompare(String(b.name)));
+          render(categoryClimbs, gradeSelect.value, searchInput.value.trim());
+        }
+        function selectCategory(category){
+          selectedCategory = category;
+          categoryPicker.classList.add('hidden');
+          backButton.classList.remove('hidden');
+          routeMain.classList.remove('hidden');
+          routeControls.classList.toggle('hidden', category !== 'adults');
+          gradeSelect.innerHTML = '<option value="all">All adult grades</option>';
+          if(category === 'adults'){
+            for(const g of uniqueGrades(climbs.filter(c=>climbCategory(c)==='adults'))){
+              const opt = document.createElement('option'); opt.value=g; opt.textContent=g; gradeSelect.appendChild(opt);
+            }
+          }
+          searchInput.value = '';
+          update();
+        }
+        categoryPicker.querySelectorAll('[data-category]').forEach(button=> button.addEventListener('click', ()=> selectCategory(button.dataset.category)));
+        backButton.addEventListener('click', ()=>{
+          selectedCategory = null;
+          categoryPicker.classList.remove('hidden');
+          backButton.classList.add('hidden');
+          routeMain.classList.add('hidden');
+          routeControls.classList.add('hidden');
+        });
         gradeSelect.addEventListener('change', update);
         searchInput.addEventListener('input', update);
         update();

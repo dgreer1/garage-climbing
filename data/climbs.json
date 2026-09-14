@@ -28,6 +28,48 @@
       ],
       "notes": "Feet follow hands.\nUse any feet on the\nvert board.",
       "createdAt": "2026-08-17T09:56:09.928Z"
+    },
+    {
+      "id": "CL003",
+      "name": "First is the worst",
+      "category": "kids",
+      "holds": [
+        "Blue 2"
+      ],
+      "notes": "Use anything to get to this hold",
+      "createdAt": "2026-09-14T10:19:27.186Z",
+      "kidsLevel": 1,
+      "kidsNumber": 1
+    },
+    {
+      "id": "CL004",
+      "name": "Second is the Best",
+      "category": "kids",
+      "holds": [
+        "Blue 3"
+      ],
+      "notes": "Use anything to get to this hold",
+      "createdAt": "2026-09-14T10:21:38.866Z",
+      "kidsLevel": 1,
+      "kidsNumber": 2
+    },
+    {
+      "id": "CL005",
+      "name": "The Dawn Wall Lite",
+      "category": "kids",
+      "holds": [
+        "Blue 1",
+        "Blue Handle",
+        "Blue 2",
+        "Angry Eyebrow",
+        "The Bone",
+        "Blue 4",
+        "Blue Top"
+      ],
+      "notes": "Feet anywhere",
+      "createdAt": "2026-09-14T10:29:29.962Z",
+      "kidsLevel": 2,
+      "kidsNumber": 1
     }
   ]
 }

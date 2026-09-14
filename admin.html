@@ -70,7 +70,13 @@
           <div style="margin-top:0.5rem">
             <div class="actions">
               <input id="climbName" placeholder="Climb name" style="width:200px" />
-              <input id="climbGrade" placeholder="Grade" style="width:80px;margin-left:0.5rem" />
+              <select id="climbCategory" title="Choose whether this route belongs to the kids or adults section." style="margin-left:0.5rem">
+                <option value="adults">Adults</option>
+                <option value="kids">Kids</option>
+              </select>
+              <input id="climbGrade" placeholder="Grade (V0, V1...)" title="Adult difficulty grade. Used for adult routes." style="width:130px;margin-left:0.5rem" />
+              <input id="climbLevel" type="number" min="1" step="1" placeholder="Level" title="Kids level number, for example 1 or 2." style="width:80px;margin-left:0.5rem;display:none" />
+              <input id="climbNumber" type="number" min="1" step="1" placeholder="Climb #" title="Order of this climb within its kids level." style="width:90px;margin-left:0.5rem;display:none" />
             </div>
             <div class="actions" style="margin-top:0.5rem">
               <button id="startRecord" class="btn small" title="Start recording a climb by clicking hold markers in order.">Start recording</button>

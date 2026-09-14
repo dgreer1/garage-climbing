@@ -139,6 +139,36 @@
       "notes": "",
       "active": true,
       "name": "Hello Kitty"
+    },
+    {
+      "id": "H015",
+      "x": 0.389323,
+      "y": 0.424326,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "The Bone"
+    },
+    {
+      "id": "H016",
+      "x": 0.470052,
+      "y": 0.522167,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Angry Eyebrow"
+    },
+    {
+      "id": "H017",
+      "x": 0.359809,
+      "y": 0.258858,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Blue Top"
     }
   ]
 }
