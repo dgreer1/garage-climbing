@@ -38,7 +38,7 @@
       "gridRef": "M14",
       "notes": "",
       "active": true,
-      "name": "Blue 2"
+      "name": "Blue 3"
     },
     {
       "id": "H005",
@@ -48,7 +48,7 @@
       "gridRef": "I15",
       "notes": "Third hold of the Dawn Wall",
       "active": true,
-      "name": "Blue 3"
+      "name": "Blue 4"
     },
     {
       "id": "H006",
@@ -58,7 +58,7 @@
       "gridRef": "E12",
       "notes": "Fourth hold of the Dawn Wall",
       "active": true,
-      "name": "Blue 4"
+      "name": "Blue 5"
     },
     {
       "id": "H008",
@@ -72,9 +72,9 @@
     },
     {
       "id": "H009",
-      "x": 0.136559,
-      "y": 0.844559,
-      "colour": "yellow",
+      "x": 0.129774,
+      "y": 0.844469,
+      "colour": "blue",
       "gridRef": "",
       "notes": "",
       "active": true,
@@ -84,7 +84,7 @@
       "id": "H010",
       "x": 0.189964,
       "y": 0.531427,
-      "colour": "yellow",
+      "colour": "blue",
       "gridRef": "L3",
       "notes": "",
       "active": true,
@@ -94,7 +94,7 @@
       "id": "H011",
       "x": 0.243728,
       "y": 0.687974,
-      "colour": "yellow",
+      "colour": "blue",
       "gridRef": "T4",
       "notes": "",
       "active": true,
@@ -104,7 +104,7 @@
       "id": "H012",
       "x": 0.404131,
       "y": 0.480701,
-      "colour": "yellow",
+      "colour": "blue",
       "gridRef": "",
       "notes": "",
       "active": true,
@@ -114,7 +114,7 @@
       "id": "H013",
       "x": 0.397562,
       "y": 0.384665,
-      "colour": "yellow",
+      "colour": "blue",
       "gridRef": "",
       "notes": "",
       "active": true,
@@ -124,7 +124,7 @@
       "id": "H014",
       "x": 0.651764,
       "y": 0.335398,
-      "colour": "yellow",
+      "colour": "blue",
       "gridRef": "",
       "notes": "",
       "active": true,
@@ -169,6 +169,296 @@
       "notes": "",
       "active": true,
       "name": "Blue Top"
+    },
+    {
+      "id": "H018",
+      "x": 0.526476,
+      "y": 0.207779,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Yellow Top"
+    },
+    {
+      "id": "H019",
+      "x": 0.758247,
+      "y": 0.261736,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Green Top"
+    },
+    {
+      "id": "H020",
+      "x": 0.610677,
+      "y": 0.64375,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Blue 2"
+    },
+    {
+      "id": "H021",
+      "x": 0.668837,
+      "y": 0.647347,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Watermelon"
+    },
+    {
+      "id": "H022",
+      "x": 0.642795,
+      "y": 0.713534,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Heart of Ice"
+    },
+    {
+      "id": "H023",
+      "x": 0.611545,
+      "y": 0.603462,
+      "colour": "red",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Ghost Pirate"
+    },
+    {
+      "id": "H024",
+      "x": 0.348524,
+      "y": 0.614973,
+      "colour": "red",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Pizza Slice"
+    },
+    {
+      "id": "H025",
+      "x": 0.299913,
+      "y": 0.569649,
+      "colour": "red",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Sunset"
+    },
+    {
+      "id": "H026",
+      "x": 0.483073,
+      "y": 0.658138,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Yellow Foot 2"
+    },
+    {
+      "id": "H027",
+      "x": 0.437066,
+      "y": 0.789793,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Purple Foot 1"
+    },
+    {
+      "id": "H028",
+      "x": 0.490885,
+      "y": 0.681879,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Underhook 1"
+    },
+    {
+      "id": "H029",
+      "x": 0.516059,
+      "y": 0.576844,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Christmas Tree"
+    },
+    {
+      "id": "H030",
+      "x": 0.306858,
+      "y": 0.412815,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Cheese Block"
+    },
+    {
+      "id": "H031",
+      "x": 0.489149,
+      "y": 0.261736,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Middle Top"
+    },
+    {
+      "id": "H032",
+      "x": 0.304253,
+      "y": 0.608498,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Pink Foot 1"
+    },
+    {
+      "id": "H033",
+      "x": 0.617622,
+      "y": 0.444469,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Lightning Middle"
+    },
+    {
+      "id": "H034",
+      "x": 0.58724,
+      "y": 0.379721,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Lightning Upper"
+    },
+    {
+      "id": "H035",
+      "x": 0.64974,
+      "y": 0.488354,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Lightning Lower"
+    },
+    {
+      "id": "H036",
+      "x": 0.554253,
+      "y": 0.463894,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Green Eyebrow"
+    },
+    {
+      "id": "H037",
+      "x": 0.323351,
+      "y": 0.634397,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Rcok 1"
+    },
+    {
+      "id": "H038",
+      "x": 0.674913,
+      "y": 0.558858,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Rock 2"
+    },
+    {
+      "id": "H039",
+      "x": 0.738281,
+      "y": 0.514254,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Rock 3"
+    },
+    {
+      "id": "H040",
+      "x": 0.376302,
+      "y": 0.504901,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Rock 4"
+    },
+    {
+      "id": "H041",
+      "x": 0.55599,
+      "y": 0.414973,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Rock 5"
+    },
+    {
+      "id": "H042",
+      "x": 0.683594,
+      "y": 0.367491,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Rock 6"
+    },
+    {
+      "id": "H043",
+      "x": 0.180122,
+      "y": 0.358138,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Rock 7"
+    },
+    {
+      "id": "H044",
+      "x": 0.490885,
+      "y": 0.313534,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Rock 8"
+    },
+    {
+      "id": "H045",
+      "x": 0.46224,
+      "y": 0.382599,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Orange Knobler"
+    },
+    {
+      "id": "H046",
+      "x": 0.582899,
+      "y": 0.532239,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Cloud"
     }
   ]
 }

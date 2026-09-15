@@ -24,10 +24,12 @@
         "Blue 2",
         "Blue 3",
         "Blue 4",
+        "Blue 5",
         "Blue Top"
       ],
       "notes": "Feet follow hands.\nUse any feet on the\nvert board.",
-      "createdAt": "2026-08-17T09:56:09.928Z"
+      "createdAt": "2026-08-17T09:56:09.928Z",
+      "category": "adults"
     },
     {
       "id": "CL003",
@@ -68,8 +70,68 @@
       ],
       "notes": "Feet anywhere",
       "createdAt": "2026-09-14T10:29:29.962Z",
-      "kidsLevel": 2,
+      "kidsLevel": 3,
       "kidsNumber": 1
+    },
+    {
+      "id": "CL006",
+      "name": "Pink Herring",
+      "category": "adults",
+      "holds": [
+        "Purple Foot 1",
+        "Underhook 1",
+        "Yellow Foot 2",
+        "Pink Foot 1",
+        "Christmas Tree",
+        "Cheese Block",
+        "Middle Top"
+      ],
+      "notes": "",
+      "createdAt": "2026-09-15T08:56:38.657Z",
+      "grade": "V2"
+    },
+    {
+      "id": "CL007",
+      "name": "Watermelon Ghost",
+      "category": "kids",
+      "holds": [
+        "Watermelon",
+        "Blue 2",
+        "Ghost Pirate",
+        "Cloud",
+        "Lightning Middle",
+        "Rock 6"
+      ],
+      "notes": "Feet anywhere",
+      "createdAt": "2026-09-15T10:17:03.083Z",
+      "kidsLevel": 5,
+      "kidsNumber": 1,
+      "grade": ""
+    },
+    {
+      "id": "CL008",
+      "name": "Blue Top",
+      "category": "kids",
+      "holds": [
+        "Blue Top"
+      ],
+      "notes": "Use anything",
+      "createdAt": "2026-09-15T10:19:11.086Z",
+      "kidsLevel": 2,
+      "kidsNumber": 1,
+      "grade": ""
+    },
+    {
+      "id": "CL009",
+      "name": "Green Top",
+      "category": "kids",
+      "holds": [
+        "Green Top"
+      ],
+      "notes": "Use anything",
+      "createdAt": "2026-09-15T10:19:51.983Z",
+      "kidsLevel": 2,
+      "kidsNumber": 2
     }
   ]
 }

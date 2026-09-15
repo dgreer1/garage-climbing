@@ -9,7 +9,9 @@ body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;background:#f7fafc;co
 .wall-img{max-width:100%;height:auto;display:block}
 .controls{margin-bottom:0.5rem}
 .cp-list{max-height:60vh;overflow:auto}
-.cp-item{padding:0.4rem;border-bottom:1px dashed #eee;display:flex;align-items:center;justify-content:space-between}
+.cp-item{padding:0.4rem;border-bottom:1px dashed #d9e2ec;display:flex;align-items:center;justify-content:space-between;color:#1f2937;font-size:0.95rem}
+.hold-name-display{color:#111827;font-weight:600}
+.cp-item input,.cp-item textarea{color:#111827}
 .btn{padding:0.45rem 0.7rem;border-radius:6px;border:1px solid #cfe0ff;background:#eaf4ff;cursor:pointer}
 .small{padding:0.3rem 0.5rem;font-size:0.9rem}
 .footer{padding:0.5rem;text-align:center;color:#6b7280}

@@ -176,14 +176,25 @@ class HoldsApp{
       const g = document.createElementNS('http://www.w3.org/2000/svg','g'); g.classList.add('hold-marker');
       const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
       const selected = selectedIds.has(ho.id) || selectedIds.has(ho.name);
-      circle.setAttribute('cx', cx); circle.setAttribute('cy', cy); circle.setAttribute('r', selected ? 5 : 3); circle.setAttribute('fill', selected ? '#ff6f00' : (this.mode === 'climbs' ? '#9ca3af' : (ho.colour||'blue'))); circle.setAttribute('stroke', selected ? '#fff' : '#fff'); circle.setAttribute('stroke-width', selected ? 2 : 1); circle.setAttribute('opacity', this.mode === 'climbs' && !selected ? '0.45' : '1');
-      const text = document.createElementNS('http://www.w3.org/2000/svg','text'); text.setAttribute('x', cx+8); text.setAttribute('y', cy+4); text.setAttribute('fill', selected ? '#111' : '#6b7280'); text.setAttribute('font-size', selected ? 11 : 10); text.setAttribute('opacity', this.mode === 'climbs' && !selected ? '0.45' : '1'); text.textContent = (ho.name && ho.name.length>0) ? ho.name : ho.id;
+      const holdColour = this.getHoldColour(ho.colour);
+      circle.setAttribute('cx', cx); circle.setAttribute('cy', cy); circle.setAttribute('r', selected ? 5 : 3); circle.setAttribute('fill', holdColour); circle.setAttribute('stroke', selected ? '#fff' : '#1f2937'); circle.setAttribute('stroke-width', selected ? 2.5 : 1); circle.setAttribute('opacity', this.mode === 'climbs' && !selected ? '0.55' : '1');
+      const text = document.createElementNS('http://www.w3.org/2000/svg','text'); text.setAttribute('x', cx+8); text.setAttribute('y', cy+4); text.setAttribute('fill', selected ? '#111827' : '#374151'); text.setAttribute('font-size', selected ? 11 : 10); text.setAttribute('font-weight', selected ? '700' : '600'); text.setAttribute('opacity', this.mode === 'climbs' && !selected ? '0.55' : '1'); text.setAttribute('stroke', '#fff'); text.setAttribute('stroke-width', 2); text.setAttribute('paint-order', 'stroke'); text.textContent = (ho.name && ho.name.length>0) ? ho.name : ho.id;
       g.appendChild(circle); g.appendChild(text);
       this.svg.appendChild(g);
       }
     }
     // render selected hold props
     if(this.selectedHold) this.renderProps(this.selectedHold);
+  }
+
+  getHoldColour(value){
+    const colour = String(value || '').trim().toLowerCase();
+    const named = {
+      blue: '#2563eb', red: '#dc2626', yellow: '#eab308', green: '#16a34a',
+      orange: '#ea580c', purple: '#9333ea', pink: '#db2777', black: '#111827',
+      white: '#f8fafc', grey: '#64748b', gray: '#64748b', wood: '#92400e'
+    };
+    return named[colour] || value || '#2563eb';
   }
 
   selectHold(id){
