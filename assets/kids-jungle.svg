@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" role="img" aria-label="Cartoon jungle with vines, trees, a monkey, a sloth and a parrot">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8ee3b2"/>
+      <stop offset="1" stop-color="#d9f99d"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4d9f54"/>
+      <stop offset="1" stop-color="#14532d"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="700" fill="url(#sky)"/>
+  <circle cx="160" cy="125" r="82" fill="#fff4a8" opacity=".8"/>
+  <path d="M0 480 Q190 390 370 480 T760 470 T1200 450 V700 H0Z" fill="url(#ground)"/>
+  <g fill="#166534">
+    <path d="M20 0h125l25 520H0Z"/><path d="M1070 0h130v540h-160Z"/>
+  </g>
+  <g fill="#22c55e" stroke="#14532d" stroke-width="5">
+    <ellipse cx="95" cy="75" rx="100" ry="42" transform="rotate(-25 95 75)"/>
+    <ellipse cx="220" cy="45" rx="115" ry="45" transform="rotate(22 220 45)"/>
+    <ellipse cx="1110" cy="85" rx="120" ry="48" transform="rotate(20 1110 85)"/>
+    <ellipse cx="1000" cy="35" rx="100" ry="40" transform="rotate(-20 1000 35)"/>
+    <ellipse cx="420" cy="120" rx="130" ry="44" transform="rotate(-12 420 120)"/>
+  </g>
+  <g fill="none" stroke="#166534" stroke-width="12" stroke-linecap="round">
+    <path d="M250 0 Q340 150 260 315 T350 560"/>
+    <path d="M900 0 Q820 140 910 270 T850 515"/>
+    <path d="M530 0 Q480 100 550 205 T500 370"/>
+  </g>
+  <g stroke="#7c4a2d" stroke-width="10" stroke-linecap="round" fill="none">
+    <path d="M260 300 Q330 340 300 415"/>
+    <path d="M850 230 Q790 285 820 355"/>
+  </g>
+  <g transform="translate(270 330)">
+    <circle cx="0" cy="0" r="38" fill="#9a5b32" stroke="#4b2e1d" stroke-width="6"/>
+    <circle cx="-27" cy="-22" r="14" fill="#9a5b32" stroke="#4b2e1d" stroke-width="5"/>
+    <circle cx="27" cy="-22" r="14" fill="#9a5b32" stroke="#4b2e1d" stroke-width="5"/>
+    <ellipse cx="0" cy="15" rx="23" ry="17" fill="#f4c27a"/>
+    <circle cx="-12" cy="-6" r="5" fill="#171717"/><circle cx="12" cy="-6" r="5" fill="#171717"/>
+    <path d="M-12 23 Q0 33 12 23" fill="none" stroke="#4b2e1d" stroke-width="4"/>
+    <path d="M-25 40 Q-70 92 -115 58 M25 40 Q70 92 115 58" fill="none" stroke="#9a5b32" stroke-width="18" stroke-linecap="round"/>
+    <path d="M-32 42 Q-75 115 -42 150 M32 42 Q75 115 42 150" fill="none" stroke="#9a5b32" stroke-width="18" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(790 390) rotate(-12)">
+    <ellipse cx="0" cy="35" rx="48" ry="75" fill="#b77945" stroke="#5b371f" stroke-width="6"/>
+    <circle cx="0" cy="-35" r="34" fill="#b77945" stroke="#5b371f" stroke-width="6"/>
+    <path d="M-25 -48 Q0 -70 25 -48" fill="#d9a066" stroke="#5b371f" stroke-width="5"/>
+    <circle cx="-11" cy="-38" r="4" fill="#171717"/><circle cx="11" cy="-38" r="4" fill="#171717"/>
+    <path d="M-55 15 Q-110 0 -135 -55" fill="none" stroke="#b77945" stroke-width="17" stroke-linecap="round"/>
+    <path d="M55 15 Q110 0 135 -55" fill="none" stroke="#b77945" stroke-width="17" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(1040 270)">
+    <ellipse cx="0" cy="0" rx="38" ry="54" fill="#ef4444" stroke="#7f1d1d" stroke-width="5"/>
+    <circle cx="0" cy="-48" r="30" fill="#fef3c7" stroke="#7f1d1d" stroke-width="5"/>
+    <path d="M25 -48 l50 15 -50 15Z" fill="#f59e0b" stroke="#92400e" stroke-width="4"/>
+    <path d="M-20 40 l-22 45 M20 40 l22 45" stroke="#7f1d1d" stroke-width="6"/>
+  </g>
+  <g fill="#86efac" opacity=".9">
+    <ellipse cx="80" cy="570" rx="120" ry="28"/><ellipse cx="1120" cy="600" rx="150" ry="32"/><ellipse cx="560" cy="610" rx="170" ry="35"/>
+  </g>
+</svg>

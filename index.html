@@ -9,14 +9,17 @@
         --bg:#f6f8fb;--card:#fff;--muted:#6b7280;--accent:#2563eb
       }
       *{box-sizing:border-box}
-      body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(180deg,#eef2ff,var(--bg));color:#111}
+      body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(180deg,#eef2ff,var(--bg));color:#111;transition:background 0.35s ease}
+      body.kids-theme{background:#b9e58b url('assets/kids-jungle.svg') center top/cover fixed no-repeat;color:#17351f}
       header{padding:2rem 1rem;text-align:center}
       h1{margin:0;font-size:1.75rem}
       .category-picker{min-height:55vh;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem;align-items:center;max-width:760px;margin:2rem auto;padding:1rem}
-      .category-button{min-height:220px;border:0;border-radius:18px;background:#fff;box-shadow:0 10px 28px rgba(16,24,40,0.12);font-size:clamp(2rem,6vw,4rem);font-weight:800;cursor:pointer;color:#172554}
+      .category-button{min-height:220px;border:0;border-radius:18px;background-color:#fff;box-shadow:0 10px 28px rgba(16,24,40,0.12);font-size:clamp(2rem,6vw,4rem);font-weight:800;cursor:pointer;color:#fff;background-position:center;background-size:cover;position:relative;overflow:hidden;text-shadow:0 3px 12px rgba(0,0,0,0.8);isolation:isolate}
+      .category-button span{position:relative;z-index:2}
+      .category-button::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.24);z-index:1}
       .category-button:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(16,24,40,0.18)}
-      .category-button.kids{background:#fff7ed;color:#9a3412}
-      .category-button.adults{background:#eff6ff;color:#1e3a8a}
+      .category-button.kids{background-image:url('assets/kids-jungle.svg')}
+      .category-button.adults{background-image:url('assets/adult-climbing.svg')}
       .hidden{display:none!important}
       .back-button{margin:1rem auto 0;display:block;padding:0.5rem 0.8rem;border:1px solid #d1d5db;border-radius:8px;background:#fff;cursor:pointer}
       .controls{display:flex;gap:0.75rem;justify-content:center;align-items:center;margin-top:0.75rem}
@@ -52,8 +55,8 @@
     <header>
       <h1>Garage Climbing — Routes</h1>
       <div id="categoryPicker" class="category-picker">
-        <button class="category-button kids" data-category="kids">Kids</button>
-        <button class="category-button adults" data-category="adults">Adults</button>
+        <button class="category-button kids" data-category="kids" aria-label="Kids routes"><span>Kids</span></button>
+        <button class="category-button adults" data-category="adults" aria-label="Adult routes"><span>Adults</span></button>
       </div>
       <button id="backToCategories" class="back-button hidden">Back to Kids / Adults</button>
       <div id="routeControls" class="controls hidden">
@@ -356,6 +359,7 @@
         }
         function selectCategory(category){
           selectedCategory = category;
+          document.body.classList.toggle('kids-theme', category === 'kids');
           categoryPicker.classList.add('hidden');
           backButton.classList.remove('hidden');
           routeMain.classList.remove('hidden');
@@ -372,6 +376,7 @@
         categoryPicker.querySelectorAll('[data-category]').forEach(button=> button.addEventListener('click', ()=> selectCategory(button.dataset.category)));
         backButton.addEventListener('click', ()=>{
           selectedCategory = null;
+          document.body.classList.remove('kids-theme');
           categoryPicker.classList.remove('hidden');
           backButton.classList.add('hidden');
           routeMain.classList.add('hidden');

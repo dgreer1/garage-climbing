@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" role="img" aria-label="Cartoon climber on a colourful climbing wall">
+  <defs><linearGradient id="wall" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#bfdbfe"/><stop offset="1" stop-color="#fef3c7"/></linearGradient></defs>
+  <rect width="1200" height="700" fill="#dbeafe"/>
+  <path d="M0 700V100 Q600 35 1200 100V700Z" fill="url(#wall)" stroke="#1e3a8a" stroke-width="12"/>
+  <path d="M0 595 Q260 520 510 590 T1200 570V700H0Z" fill="#1e3a8a" opacity=".8"/>
+  <g stroke="#334155" stroke-width="7">
+    <path d="M170 270l80-18 18 75-80 18Z" fill="#ef4444"/><path d="M380 170l70 12-8 74-70-12Z" fill="#22c55e"/>
+    <path d="M690 210l85-28 28 70-85 28Z" fill="#eab308"/><path d="M910 355l75-20 20 65-75 20Z" fill="#9333ea"/>
+    <path d="M520 410l90-10 8 70-90 10Z" fill="#f97316"/><path d="M260 470l75-25 25 65-75 25Z" fill="#2563eb"/>
+  </g>
+  <g transform="translate(600 315) rotate(-12)">
+    <circle cx="0" cy="-115" r="38" fill="#f2b880" stroke="#7c2d12" stroke-width="7"/>
+    <path d="M-37 -125 Q0 -178 37 -125" fill="#292524" stroke="#171717" stroke-width="8"/>
+    <circle cx="-12" cy="-112" r="5"/><circle cx="12" cy="-112" r="5"/>
+    <path d="M-12 -90 Q0 -82 12 -90" fill="none" stroke="#7c2d12" stroke-width="4"/>
+    <path d="M0 -75L-12 85" stroke="#0f172a" stroke-width="28" stroke-linecap="round"/>
+    <path d="M-8 -45L-120 -110 M8 -45L120 -10" stroke="#f2b880" stroke-width="18" stroke-linecap="round"/>
+    <path d="M-12 80L-125 155 M-12 80L110 100" stroke="#0f172a" stroke-width="23" stroke-linecap="round"/>
+  </g>
+  <text x="600" y="655" text-anchor="middle" font-family="sans-serif" font-size="44" font-weight="700" fill="#fff">CLIMB YOUR LINE</text>
+</svg>

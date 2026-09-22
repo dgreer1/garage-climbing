@@ -36,7 +36,7 @@
       "name": "First is the worst",
       "category": "kids",
       "holds": [
-        "Blue 2"
+        "Blue 3"
       ],
       "notes": "Use anything to get to this hold",
       "createdAt": "2026-09-14T10:19:27.186Z",
@@ -48,7 +48,7 @@
       "name": "Second is the Best",
       "category": "kids",
       "holds": [
-        "Blue 3"
+        "Blue 4"
       ],
       "notes": "Use anything to get to this hold",
       "createdAt": "2026-09-14T10:21:38.866Z",
@@ -132,6 +132,156 @@
       "createdAt": "2026-09-15T10:19:51.983Z",
       "kidsLevel": 2,
       "kidsNumber": 2
+    },
+    {
+      "id": "CL010",
+      "name": "Just Stand Up Punk",
+      "category": "adults",
+      "holds": [
+        "Blue 2",
+        "Blue 4",
+        "Blue Top"
+      ],
+      "notes": "Feet follow hands",
+      "createdAt": "2026-09-15T10:33:18.587Z",
+      "grade": "V1"
+    },
+    {
+      "id": "CL011",
+      "name": "Offsite",
+      "category": "adults",
+      "holds": [
+        "Orange Foot 1",
+        "Purple Foot 1",
+        "Orange Foot 2",
+        "Purple Foot 4",
+        "Star",
+        "Blue 2",
+        "Pink Side",
+        "Booby",
+        "Crocodile"
+      ],
+      "notes": "",
+      "createdAt": "2026-09-22T09:44:44.665Z",
+      "grade": "V2"
+    },
+    {
+      "id": "CL012",
+      "name": "The Dawn Appalle",
+      "category": "adults",
+      "holds": [
+        "Blue 1",
+        "Blue 2",
+        "Apple Tree",
+        "Blue 4",
+        "Booby",
+        "Blue Top"
+      ],
+      "notes": "",
+      "createdAt": "2026-09-22T09:56:37.462Z",
+      "grade": "V0"
+    },
+    {
+      "id": "CL013",
+      "name": "Minimalism",
+      "category": "adults",
+      "holds": [
+        "Yellow 1",
+        "Pink Knobler",
+        "Blue 3",
+        "Hello Kitty",
+        "Green Top"
+      ],
+      "notes": "",
+      "createdAt": "2026-09-22T10:01:04.826Z",
+      "grade": "V0"
+    },
+    {
+      "id": "CL014",
+      "name": "Not so Jugular",
+      "category": "adults",
+      "holds": [
+        "Orange 1",
+        "Orange 2",
+        "Orange Side Knob",
+        "Orange 3",
+        "Middle Top"
+      ],
+      "notes": "",
+      "createdAt": "2026-09-22T10:02:20.503Z",
+      "grade": "V1"
+    },
+    {
+      "id": "CL015",
+      "name": "Fist of Dougal",
+      "category": "adults",
+      "holds": [
+        "Yellow Foot 4",
+        "Yellow Foot 3",
+        "Pink Foot 4",
+        "Heath",
+        "Blue 2",
+        "Cream Lip",
+        "Orange Knobler",
+        "Rock 9"
+      ],
+      "notes": "",
+      "createdAt": "2026-09-22T10:09:30.220Z",
+      "grade": "V1"
+    },
+    {
+      "id": "CL016",
+      "name": "Rocky 1",
+      "category": "adults",
+      "holds": [
+        "Rock 1",
+        "Rock 4",
+        "Rock 7",
+        "Rock 8",
+        "Rock 9",
+        "Rock 10"
+      ],
+      "notes": "",
+      "createdAt": "2026-09-22T10:11:07.260Z",
+      "grade": "V2"
+    },
+    {
+      "id": "CL017",
+      "name": "Enter the Dougal",
+      "category": "adults",
+      "holds": [
+        "Blue 2",
+        "Red 1",
+        "Purple 1",
+        "Green Top"
+      ],
+      "notes": "",
+      "createdAt": "2026-09-22T10:14:28.305Z",
+      "grade": "V1"
+    },
+    {
+      "id": "CL018",
+      "name": "Mandalorian",
+      "category": "kids",
+      "holds": [
+        "Mandalorian"
+      ],
+      "notes": "",
+      "createdAt": "2026-09-22T10:20:28.429Z",
+      "kidsLevel": 1,
+      "kidsNumber": 3
+    },
+    {
+      "id": "CL019",
+      "name": "Golden Eagle",
+      "category": "kids",
+      "holds": [
+        "Blue 5"
+      ],
+      "notes": "",
+      "createdAt": "2026-09-22T10:27:23.494Z",
+      "kidsLevel": 1,
+      "kidsNumber": 4
     }
   ]
 }
