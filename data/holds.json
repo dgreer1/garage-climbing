@@ -919,6 +919,16 @@
       "notes": "",
       "active": true,
       "name": "Mandalorian"
+    },
+    {
+      "id": "H093",
+      "x": 0.749566,
+      "y": 0.369649,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Spider"
     }
   ]
 }
