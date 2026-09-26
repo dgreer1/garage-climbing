@@ -63,6 +63,7 @@ class ClimbApp{
         if(!id) return;
         // if in add-hold mode and a climb is selected -> append to that climb
         if(this.addHoldMode && this.selectedClimb){
+          this.selectedClimb.unusableHolds = (this.selectedClimb.unusableHolds || []).filter(hold => hold !== id);
           this.selectedClimb.holds.push(id);
           this.save(); this.render(); this.selectClimb(this.selectedClimb.id);
           return;
@@ -113,7 +114,10 @@ class ClimbApp{
       }
       this.selectedClimb.notes = document.getElementById('climbNotes') ? document.getElementById('climbNotes').value : (this.selectedClimb.notes||'');
       // if currentSequence has items (from recording), replace holds; otherwise keep existing
-      if(this.currentSequence.length>0) this.selectedClimb.holds = this.currentSequence.slice();
+      if(this.currentSequence.length>0){
+        this.selectedClimb.holds = this.currentSequence.slice();
+        this.selectedClimb.unusableHolds = [];
+      }
       this.save(); this.render(); this.selectClimb(this.selectedClimb.id);
       // clear recording state
       this.currentSequence = [];
@@ -124,7 +128,7 @@ class ClimbApp{
     if(this.currentSequence.length===0){ if(!confirm('Sequence is empty. Save empty climb?')) return; }
     const id = this.nextId();
     const category = this.categoryInput && this.categoryInput.value === 'kids' ? 'kids' : 'adults';
-    const climb = { id, name: name || id, category, holds: this.currentSequence.slice(), notes:'', createdAt:new Date().toISOString() };
+    const climb = { id, name: name || id, category, holds: this.currentSequence.slice(), unusableHolds: [], notes:'', createdAt:new Date().toISOString() };
     if(category === 'kids'){
       climb.kidsLevel = Math.max(1, Number(this.levelInput.value) || 1);
       climb.kidsNumber = Math.max(1, Number(this.numberInput.value) || 1);
@@ -181,7 +185,12 @@ class ClimbApp{
     if(this.numberInput) this.numberInput.value = this.selectedClimb.kidsNumber || '';
     this.updateCategoryFields();
     // show holds sequence with edit controls
-    const seqHtml = this.selectedClimb.holds.map((hid,idx)=> `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem"><div>${idx+1}. ${hid}</div><div><button class='small' title='Move this hold one position earlier in the climb.' data-idx='${idx}' data-action='up'>▲</button> <button class='small' title='Move this hold one position later in the climb.' data-idx='${idx}' data-action='down'>▼</button> <button class='small' title='Remove this hold from the climb sequence.' data-idx='${idx}' data-action='remove'>Remove</button></div></div>`).join('');
+    const seqHtml = this.selectedClimb.holds.map((hid,idx)=>{
+      const unusable = (this.selectedClimb.unusableHolds || []).includes(hid);
+      const useActionLabel = unusable ? 'Use' : "Don't use";
+      const useTitle = unusable ? 'Allow this hold on the climb.' : 'Mark this hold as forbidden on the climb.';
+      return `<div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem;margin-bottom:0.35rem"><div>${idx+1}. ${hid}${unusable ? ' — forbidden' : ''}</div><div><button class='small' title='Move this hold one position earlier in the climb.' data-idx='${idx}' data-action='up'>▲</button> <button class='small' title='Move this hold one position later in the climb.' data-idx='${idx}' data-action='down'>▼</button> <button class='small' title='Remove this hold from the climb sequence.' data-idx='${idx}' data-action='remove'>Remove</button> <button class='small' title='${useTitle}' data-idx='${idx}' data-action='toggle-use'>${useActionLabel}</button></div></div>`;
+    }).join('');
     this.climbPropsEl.innerHTML = `<div><strong>${this.selectedClimb.id} - Editing</strong></div>
       <div style="margin-top:0.5rem"><strong>Sequence</strong></div>
       <div id="climbSeq" style="margin-top:0.5rem">${seqHtml}</div>
@@ -196,6 +205,16 @@ class ClimbApp{
         if(action==='remove'){ this.selectedClimb.holds.splice(idx,1); this.save(); this.selectClimb(this.selectedClimb.id); this.render(); }
         if(action==='up' && idx>0){ const a=this.selectedClimb.holds; [a[idx-1],a[idx]]=[a[idx],a[idx-1]]; this.save(); this.selectClimb(this.selectedClimb.id); this.render(); }
         if(action==='down' && idx < this.selectedClimb.holds.length-1){ const a=this.selectedClimb.holds; [a[idx+1],a[idx]]=[a[idx],a[idx+1]]; this.save(); this.selectClimb(this.selectedClimb.id); this.render(); }
+        if(action==='toggle-use'){
+          const hold = this.selectedClimb.holds[idx];
+          const unusableHolds = this.selectedClimb.unusableHolds || [];
+          this.selectedClimb.unusableHolds = unusableHolds.includes(hold)
+            ? unusableHolds.filter(item => item !== hold)
+            : [...unusableHolds, hold];
+          this.save();
+          this.selectClimb(this.selectedClimb.id);
+          this.render();
+        }
       });
     });
     document.getElementById('addHoldToClimb').addEventListener('click', ()=>{ this.addHoldMode = !this.addHoldMode; document.getElementById('addHoldToClimb').textContent = this.addHoldMode ? 'Stop adding holds' : 'Add hold (click markers)'; });

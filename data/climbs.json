@@ -63,6 +63,7 @@
         "Blue 1",
         "Blue Handle",
         "Blue 2",
+        "Blue 3",
         "Angry Eyebrow",
         "The Bone",
         "Blue 4",
@@ -72,7 +73,9 @@
       "notes": "Feet anywhere",
       "createdAt": "2026-09-14T10:29:29.962Z",
       "kidsLevel": 3,
-      "kidsNumber": 1
+      "kidsNumber": 1,
+      "unusableHolds": [],
+      "grade": ""
     },
     {
       "id": "CL006",
@@ -119,8 +122,7 @@
       "notes": "Use anything",
       "createdAt": "2026-09-15T10:19:11.086Z",
       "kidsLevel": 2,
-      "kidsNumber": 1,
-      "grade": ""
+      "kidsNumber": 4
     },
     {
       "id": "CL009",
@@ -132,7 +134,7 @@
       "notes": "Use anything",
       "createdAt": "2026-09-15T10:19:51.983Z",
       "kidsLevel": 2,
-      "kidsNumber": 2
+      "kidsNumber": 5
     },
     {
       "id": "CL010",
@@ -282,7 +284,7 @@
       "notes": "",
       "createdAt": "2026-09-22T10:27:23.494Z",
       "kidsLevel": 1,
-      "kidsNumber": 4
+      "kidsNumber": 5
     },
     {
       "id": "CL020",
@@ -302,6 +304,77 @@
       "createdAt": "2026-09-23T06:38:59.966Z",
       "kidsLevel": 3,
       "kidsNumber": 3
+    },
+    {
+      "id": "CL021",
+      "name": "Hello Kitty",
+      "category": "kids",
+      "holds": [
+        "Hello Kitty"
+      ],
+      "unusableHolds": [],
+      "notes": "Use Anything",
+      "createdAt": "2026-09-25T21:39:38.589Z",
+      "kidsLevel": 1,
+      "kidsNumber": 5,
+      "grade": ""
+    },
+    {
+      "id": "CL023",
+      "name": "Hello Kitty - 2 Handles",
+      "category": "kids",
+      "holds": [
+        "The Bone",
+        "Hello Kitty"
+      ],
+      "unusableHolds": [
+        "The Bone"
+      ],
+      "notes": "",
+      "createdAt": "2026-09-26T03:52:04.832Z",
+      "kidsLevel": 2,
+      "kidsNumber": 1,
+      "grade": ""
+    },
+    {
+      "id": "CL024",
+      "name": "Hello Kitty - 1 Handle",
+      "category": "kids",
+      "holds": [
+        "Angry Eyebrow",
+        "The Bone",
+        "Hello Kitty"
+      ],
+      "unusableHolds": [
+        "Angry Eyebrow",
+        "The Bone"
+      ],
+      "notes": "",
+      "createdAt": "2026-09-26T03:53:34.632Z",
+      "kidsLevel": 2,
+      "kidsNumber": 2,
+      "grade": ""
+    },
+    {
+      "id": "CL025",
+      "name": "Hello Kitty - No Handles!!!",
+      "category": "kids",
+      "holds": [
+        "Blue Handle",
+        "Angry Eyebrow",
+        "The Bone",
+        "Hello Kitty"
+      ],
+      "unusableHolds": [
+        "Blue Handle",
+        "Angry Eyebrow",
+        "The Bone"
+      ],
+      "notes": "",
+      "createdAt": "2026-09-26T03:54:45.264Z",
+      "kidsLevel": 2,
+      "kidsNumber": 3,
+      "grade": ""
     }
   ]
 }

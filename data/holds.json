@@ -298,7 +298,7 @@
       "gridRef": "",
       "notes": "",
       "active": true,
-      "name": "Cheese Block"
+      "name": "Black Eyed Susan"
     },
     {
       "id": "H031",
@@ -929,6 +929,86 @@
       "notes": "",
       "active": true,
       "name": "Spider"
+    },
+    {
+      "id": "H094",
+      "x": 0.53342,
+      "y": 0.604901,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Banana"
+    },
+    {
+      "id": "H095",
+      "x": 0.340712,
+      "y": 0.432959,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Cream Side 1"
+    },
+    {
+      "id": "H096",
+      "x": 0.092448,
+      "y": 0.586196,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Cream Side 2"
+    },
+    {
+      "id": "H097",
+      "x": 0.125434,
+      "y": 0.607059,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Pink Crimp 1"
+    },
+    {
+      "id": "H098",
+      "x": 0.646267,
+      "y": 0.577563,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Pink Crimp 2"
+    },
+    {
+      "id": "H099",
+      "x": 0.254774,
+      "y": 0.410656,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Dinosaur"
+    },
+    {
+      "id": "H100",
+      "x": 0.551649,
+      "y": 0.723606,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Tadhg"
+    },
+    {
+      "id": "H101",
+      "x": 0.87283,
+      "y": 0.474685,
+      "colour": "blue",
+      "gridRef": "",
+      "notes": "",
+      "active": true,
+      "name": "Butterfly"
     }
   ]
 }

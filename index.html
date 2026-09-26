@@ -11,6 +11,7 @@
       *{box-sizing:border-box}
       body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(180deg,#eef2ff,var(--bg));color:#111;transition:background 0.35s ease}
       body.kids-theme{background-color:#b9e58b;background-image:url('assets/monkey_jungle.png');background-position:center top;background-size:100% auto;background-repeat:repeat-y;background-attachment:scroll;color:#17351f}
+      body.adults-theme{background-color:#dbeafe;background-image:url('assets/adult_jungle.png');background-position:center top;background-size:100% auto;background-repeat:repeat-y;background-attachment:scroll;color:#172554}
       header{padding:2rem 1rem;text-align:center}
       h1{margin:0;font-size:1.75rem}
       .category-picker{min-height:55vh;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem;align-items:center;max-width:760px;margin:2rem auto;padding:1rem}
@@ -19,7 +20,7 @@
       .category-button::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.24);z-index:1}
       .category-button:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(16,24,40,0.18)}
       .category-button.kids{background-image:url('assets/monkey_jungle.png');background-position:center top;background-size:100% auto;background-repeat:no-repeat;background-color:#b9e58b}
-      .category-button.adults{background-image:url('assets/adult-climbing.svg');background-size:100% 100%}
+      .category-button.adults{background-image:url('assets/adult_jungle.png');background-position:center top;background-size:100% auto;background-repeat:no-repeat;background-color:#dbeafe}
       .hidden{display:none!important}
       .back-button{margin:1rem auto 0;display:block;padding:0.5rem 0.8rem;border:1px solid #d1d5db;border-radius:8px;background:#fff;cursor:pointer}
       .controls{display:flex;gap:0.75rem;justify-content:center;align-items:center;margin-top:0.75rem}
@@ -113,14 +114,19 @@
         return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER;
       }
 
-      function holdColour(value){
-        const colour = String(value || '').trim().toLowerCase();
-        const named = {
-          blue:'#2563eb', red:'#dc2626', yellow:'#eab308', green:'#16a34a',
-          orange:'#ea580c', purple:'#9333ea', pink:'#db2777', black:'#111827',
-          white:'#f8fafc', grey:'#64748b', gray:'#64748b', wood:'#92400e'
-        };
-        return named[colour] || value || '#2563eb';
+      const ROUTE_MARKER_COLOR = '#ff6f00';
+      const UNUSABLE_MARKER_COLOR = '#dc2626';
+
+      function isUnusableHold(climb, holdRef){
+        return (climb.unusableHolds || []).some(item => item === holdRef || (item && item.hold === holdRef));
+      }
+
+      function finalUsableHoldIndex(climb){
+        const holds = climb.holds || [];
+        for(let i=holds.length-1;i>=0;i--){
+          if(!isUnusableHold(climb, holds[i])) return i;
+        }
+        return -1;
       }
 
       function appendStar(parent, cx, cy, outerRadius, innerRadius, attributes){
@@ -134,6 +140,16 @@
         star.setAttribute('points', points.join(' '));
         Object.entries(attributes).forEach(([key, value])=> star.setAttribute(key, value));
         parent.appendChild(star);
+      }
+
+      function appendX(parent, cx, cy, radius, color, strokeWidth){
+        const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+        path.setAttribute('d', `M ${cx-radius} ${cy-radius} L ${cx+radius} ${cy+radius} M ${cx+radius} ${cy-radius} L ${cx-radius} ${cy+radius}`);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', color);
+        path.setAttribute('stroke-width', strokeWidth);
+        path.setAttribute('stroke-linecap', 'round');
+        parent.appendChild(path);
       }
 
       // show modal using canonical base image and overlay the selected climb
@@ -173,6 +189,7 @@
           overlay.style.width = rect.width + 'px'; overlay.style.height = rect.height + 'px'; overlay.style.left = '0px'; overlay.style.top = '0px';
             // draw markers only (no connecting line) — large view: unfilled stroked circles so image shows through
             const markerPoints = [];
+            const finalHoldIndex = finalUsableHoldIndex(climb);
             for(const [holdIndex, hid] of (climb.holds||[]).entries()){
               // try find by id first, then by hold name
               let ho = holdsMap.get(hid);
@@ -180,15 +197,17 @@
               if(!ho) continue;
               const cx = ho.x * rect.width; const cy = ho.y * rect.height;
               markerPoints.push([cx, cy]);
-              if(holdIndex === (climb.holds || []).length - 1){
-                appendStar(overlay, cx, cy, 13, 6, { fill: 'none', stroke: holdColour(ho.colour), 'stroke-width': 3 });
+              if(isUnusableHold(climb, hid)){
+                appendX(overlay, cx, cy, 9, UNUSABLE_MARKER_COLOR, 4);
+              } else if(holdIndex === finalHoldIndex){
+                appendStar(overlay, cx, cy, 13, 6, { fill: 'none', stroke: ROUTE_MARKER_COLOR, 'stroke-width': 3 });
               } else {
                 const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
                 circle.setAttribute('cx', cx);
                 circle.setAttribute('cy', cy);
                 circle.setAttribute('r', 8);
                 circle.setAttribute('fill', 'none');
-                circle.setAttribute('stroke', holdColour(ho.colour));
+                circle.setAttribute('stroke', ROUTE_MARKER_COLOR);
                 circle.setAttribute('stroke-width', 3);
                 overlay.appendChild(circle);
               }
@@ -209,16 +228,41 @@
             // place notes box in the area with maximum minimum distance from markers
             const notes = (climb.notes || '').trim();
             if(notes){
-              const boxW = Math.min(Math.max(160, rect.width * 0.3), 380);
-              const boxH = Math.min(Math.max(40, rect.height * 0.12), 160);
-              const padding = 10;
+              const edge = Math.min(10, rect.width / 20, rect.height / 20);
+              const fontSize = Math.max(11, Math.min(16, rect.width / 30));
+              const lineHeight = fontSize * 1.35;
+              const canvas = document.createElement('canvas');
+              const context = canvas.getContext('2d');
+              if(context) context.font = `${fontSize}px system-ui, sans-serif`;
+              const maxBoxW = Math.max(1, Math.min(rect.width - edge * 2, rect.width * 0.62));
+              const longestLineWidth = Math.max(...notes.split('\n').map(line =>
+                context ? context.measureText(line).width : line.length * fontSize * 0.58
+              ));
+              const boxW = Math.min(maxBoxW, Math.max(110, longestLineWidth + 20));
+              const innerW = Math.max(1, boxW - 20);
+              let wrappedLineCount = 0;
+              for(const paragraph of notes.split('\n')){
+                const words = paragraph.split(/\s+/).filter(Boolean);
+                if(words.length === 0){ wrappedLineCount++; continue; }
+                let line = '';
+                for(const word of words){
+                  const candidate = line ? `${line} ${word}` : word;
+                  const candidateWidth = context ? context.measureText(candidate).width : candidate.length * fontSize * 0.58;
+                  if(line && candidateWidth > innerW){ wrappedLineCount++; line = word; }
+                  else line = candidate;
+                }
+                wrappedLineCount++;
+              }
+              const naturalBoxH = wrappedLineCount * lineHeight + 24;
+              const maxBoxH = Math.max(1, Math.min(rect.height - edge * 2, Math.max(72, rect.height * 0.4)));
+              const boxH = Math.min(naturalBoxH, maxBoxH);
               const candidates = [
-                {x: padding, y: padding},
-                {x: rect.width - boxW - padding, y: padding},
-                {x: padding, y: rect.height - boxH - padding},
-                {x: rect.width - boxW - padding, y: rect.height - boxH - padding},
-                {x: (rect.width - boxW) / 2, y: padding},
-                {x: (rect.width - boxW) / 2, y: rect.height - boxH - padding}
+                {x: edge, y: edge},
+                {x: rect.width - boxW - edge, y: edge},
+                {x: edge, y: rect.height - boxH - edge},
+                {x: rect.width - boxW - edge, y: rect.height - boxH - edge},
+                {x: (rect.width - boxW) / 2, y: edge},
+                {x: (rect.width - boxW) / 2, y: rect.height - boxH - edge}
               ];
               function rectPointDist(rx, ry, rw, rh, px, py){
                 const dx = Math.max(rx - px, 0, px - (rx + rw));
@@ -239,15 +283,17 @@
               rectEl.setAttribute('fill', 'white'); rectEl.setAttribute('fill-opacity', 0.85);
               rectEl.setAttribute('stroke', '#ddd'); rectEl.setAttribute('stroke-width', 1);
               overlay.appendChild(rectEl);
-              const lines = String(notes).split('\n');
-              const fontSize = Math.max(12, Math.min(16, Math.round(boxH / (lines.length + 1))));
-              for(let i=0;i<lines.length;i++){
-                const t = document.createElementNS('http://www.w3.org/2000/svg','text');
-                t.setAttribute('x', best.x + 12); t.setAttribute('y', best.y + 12 + (i * (fontSize + 2)) + fontSize);
-                t.setAttribute('fill', '#111'); t.setAttribute('font-size', fontSize);
-                t.textContent = lines[i];
-                overlay.appendChild(t);
-              }
+              const foreignObject = document.createElementNS('http://www.w3.org/2000/svg','foreignObject');
+              foreignObject.setAttribute('x', best.x);
+              foreignObject.setAttribute('y', best.y);
+              foreignObject.setAttribute('width', boxW);
+              foreignObject.setAttribute('height', boxH);
+              const noteContent = document.createElementNS('http://www.w3.org/1999/xhtml','div');
+              noteContent.textContent = notes;
+              const overflowMode = naturalBoxH > maxBoxH ? 'auto' : 'hidden';
+              noteContent.setAttribute('style', `box-sizing:border-box;width:${boxW}px;height:${boxH}px;padding:9px;overflow-x:hidden;overflow-y:${overflowMode};overflow-wrap:anywhere;white-space:pre-wrap;word-break:break-word;font:${fontSize}px/1.35 system-ui,sans-serif;color:#111;background:rgba(255,255,255,.92);border:1px solid #ddd;border-radius:8px;`);
+              foreignObject.appendChild(noteContent);
+              overlay.appendChild(foreignObject);
             }
         }
 
@@ -310,17 +356,20 @@
               const holdsData = window.__holdsData || await fetch('data/holds.json?t=' + Date.now()).then(r=> r.ok ? r.json() : null);
               if(holdsData && holdsData.holds){
                 const holdsMap = new Map(); holdsData.holds.forEach(h=> holdsMap.set(h.id, h));
+                const finalHoldIndex = finalUsableHoldIndex(c);
                 for(const [holdIndex, hid] of (c.holds||[]).entries()){
                   let ho = holdsMap.get(hid);
                   if(!ho) ho = holdsData.holds.find(h=> h.name === hid || h.id === hid);
                   if(!ho) continue;
                   const cx = ho.x * rect.width; const cy = ho.y * rect.height;
-                  if(holdIndex === (c.holds || []).length - 1){
-                    appendStar(svg, cx, cy, 10, 4.5, { fill: holdColour(ho.colour), stroke: '#fff', 'stroke-width': 1.5 });
+                  if(isUnusableHold(c, hid)){
+                    appendX(svg, cx, cy, 7, UNUSABLE_MARKER_COLOR, 3.5);
+                  } else if(holdIndex === finalHoldIndex){
+                    appendStar(svg, cx, cy, 10, 4.5, { fill: ROUTE_MARKER_COLOR, stroke: '#fff', 'stroke-width': 1.5 });
                   } else {
                     const circ = document.createElementNS('http://www.w3.org/2000/svg','circle');
                     circ.setAttribute('cx', cx); circ.setAttribute('cy', cy); circ.setAttribute('r', 6);
-                    circ.setAttribute('fill', holdColour(ho.colour)); circ.setAttribute('stroke', '#fff'); circ.setAttribute('stroke-width', 1.5);
+                    circ.setAttribute('fill', ROUTE_MARKER_COLOR); circ.setAttribute('stroke', '#fff'); circ.setAttribute('stroke-width', 1.5);
                     svg.appendChild(circ);
                   }
                 }
@@ -360,6 +409,7 @@
         function selectCategory(category){
           selectedCategory = category;
           document.body.classList.toggle('kids-theme', category === 'kids');
+          document.body.classList.toggle('adults-theme', category === 'adults');
           categoryPicker.classList.add('hidden');
           backButton.classList.remove('hidden');
           routeMain.classList.remove('hidden');
@@ -377,6 +427,7 @@
         backButton.addEventListener('click', ()=>{
           selectedCategory = null;
           document.body.classList.remove('kids-theme');
+          document.body.classList.remove('adults-theme');
           categoryPicker.classList.remove('hidden');
           backButton.classList.add('hidden');
           routeMain.classList.add('hidden');
